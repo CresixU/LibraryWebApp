@@ -60,6 +60,7 @@ namespace LibraryAPI
                 eb.Property(u => u.Lastname).HasMaxLength(50).IsRequired();
                 eb.Property(u => u.Email).HasMaxLength(50).IsRequired();
                 eb.Property(u => u.Password).IsRequired();
+                eb.Property(u => u.RoleId).HasDefaultValue(4);
 
                 eb.HasOne(u => u.Address)
                     .WithMany(a => a.Users)
@@ -71,6 +72,15 @@ namespace LibraryAPI
                     .WithOne(re => re.User)
                     .HasForeignKey(re => re.UserId);
             });
+
+            //Seeding data
+            modelBuilder.Entity<Role>()
+                .HasData(
+                    new Role() { Id = 1, Name = "Admin" },
+                    new Role() { Id = 2, Name = "Owner" },
+                    new Role() { Id = 3, Name = "Employee" },
+                    new Role() { Id = 4, Name = "User" }
+                );
         }
 
 
