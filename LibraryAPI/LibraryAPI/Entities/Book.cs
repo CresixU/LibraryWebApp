@@ -8,7 +8,7 @@
         public int PublicationYear { get; set; }
         public bool IsAvailable { get; set; }
         
-        public List<Rent>? Rents { get; set; }
+        public List<Rent> Rents { get; set; }
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
     }
