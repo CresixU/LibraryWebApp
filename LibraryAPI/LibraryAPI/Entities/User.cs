@@ -9,7 +9,6 @@ namespace LibraryAPI.Entities
         public int Lastname { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public DateOnly Birthdate { get; set; }
         
         public int AddressId { get; set; }
         public virtual Address Address { get; set; }
