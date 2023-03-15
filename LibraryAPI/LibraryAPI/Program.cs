@@ -1,5 +1,6 @@
 using LibraryAPI;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +10,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<LibrarySeeder>();
 
 builder.Services.AddDbContext<LibraryContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryConnectionString"))
     );
+builder.Services.AddControllers().AddJsonOptions(
+    option => option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
+    );
 
 var app = builder.Build();
+
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<LibrarySeeder>();
+seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
