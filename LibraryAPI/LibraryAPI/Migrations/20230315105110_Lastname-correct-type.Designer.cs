@@ -4,6 +4,7 @@ using LibraryAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20230315105110_Lastname-correct-type")]
+    partial class Lastnamecorrecttype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasIndex("RentsId");
 
-                    b.ToTable("BookRent", (string)null);
+                    b.ToTable("BookRent");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Address", b =>
@@ -67,7 +70,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Book", b =>
@@ -102,7 +105,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Category", b =>
@@ -120,7 +123,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Rent", b =>
@@ -145,7 +148,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Rents", (string)null);
+                    b.ToTable("Rents");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Role", b =>
@@ -163,7 +166,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -229,7 +232,7 @@ namespace LibraryAPI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BookRent", b =>
