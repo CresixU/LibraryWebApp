@@ -1,32 +1,27 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
 using LibraryAPI.Models;
+using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Controllers
 {
+    [ApiController]
     [Route("api/users")]
     public class UserController : ControllerBase
     {
-        private readonly LibraryContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IUserService _userService
 
-        public UserController(LibraryContext libraryContext, IMapper mapper)
+        public UserController(IUserService userService)
         {
-            _dbContext = libraryContext;
-            _mapper = mapper;
+            _userService = userService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetAll()
         {
-            var users = _dbContext
-                .Users
-                .Include(u => u.Address)
-                .ToList();
-
-            var usersDtos = _mapper.Map<List<UsersDTO>>(users);
+            var users = _userService.GetAll();
 
             return Ok(users);
         }
@@ -34,16 +29,38 @@ namespace LibraryAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<User> Get([FromRoute] int id)
         {
-            var user = _dbContext
-                .Users
-                .Include(u => u.Address)
-                .Include(u => u.Rents)
-                .Include(u => u.Role)
-                .FirstOrDefault(u => u.Id == id);
+            var user = _userService.GetById(id);
 
             if (user is null) return NotFound();
 
             return Ok(user);
+        }
+
+        [HttpPost]
+        public ActionResult CreateUser([FromBody] UserCreateDTO dto)
+        {
+            var id = _userService.Create(dto);
+
+            return Created($"api/users/{id}", null);
+        }
+
+        [HttpPut]
+        public ActionResult UpdateUser([FromRoute] int id, [FromBody] UserUpdateDTO dto)
+        {
+            var isUpdated = _userService.Update(id, dto);
+
+            if (isUpdated) return Ok();
+
+            return NotFound();
+        }
+
+        public ActionResult DeleteUser([FromRoute] int id)
+        {
+            var isDeleted = _userService.Delete(id);
+
+            if (isDeleted) return NoContent();
+
+            return NotFound();
         }
     }
 }
