@@ -1,4 +1,6 @@
-﻿using LibraryAPI.Entities;
+﻿using AutoMapper;
+using LibraryAPI.Entities;
+using LibraryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +10,12 @@ namespace LibraryAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly LibraryContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public UserController(LibraryContext libraryContext)
+        public UserController(LibraryContext libraryContext, IMapper mapper)
         {
             _dbContext = libraryContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -19,7 +23,10 @@ namespace LibraryAPI.Controllers
         {
             var users = _dbContext
                 .Users
+                .Include(u => u.Address)
                 .ToList();
+
+            var usersDtos = _mapper.Map<List<UsersDTO>>(users);
 
             return Ok(users);
         }
