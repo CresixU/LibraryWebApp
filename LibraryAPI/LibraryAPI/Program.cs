@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<LibrarySeeder>();
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<LibraryContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryConnectionString"))
