@@ -4,3 +4,4 @@
 
 # Libraries
 - EntityFrameworkCore
+- AutoMapper
