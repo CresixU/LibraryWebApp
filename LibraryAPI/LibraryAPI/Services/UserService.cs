@@ -63,7 +63,10 @@ namespace LibraryAPI.Services
 
         public bool Update(int id, UserUpdateDTO dto)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+            var user = _dbContext
+                .Users
+                .Include(u => u.Address)
+                .FirstOrDefault(u => u.Id == id);
 
             if (user is null) return false; 
 
