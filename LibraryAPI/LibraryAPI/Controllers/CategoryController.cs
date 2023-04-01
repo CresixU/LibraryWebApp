@@ -1,4 +1,5 @@
-﻿using LibraryAPI.Entities;
+﻿using LibraryAPI.Models.Category;
+using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
@@ -6,19 +7,47 @@ namespace LibraryAPI.Controllers
     [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly LibraryContext _dbContext;
+        private readonly ICategoryService _service;
 
-        public CategoryController(LibraryContext dbContext)
+        public CategoryController(ICategoryService service)
         {
-            _dbContext = dbContext;
+            _service = service;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Category>> GetAll()
+        public ActionResult<IEnumerable<CategoryDTO>> GetAll()
         {
-            var categories = _dbContext.Categories.ToList();
+            var categories = _service.GetAll();
 
             return Ok(categories);
+        }
+
+        [HttpPost]
+        public ActionResult Create([FromBody] CategoryDTO dto)
+        {
+            var id = _service.Create(dto);
+
+            return Created($"api/categories/{id}", null);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromRoute] int id, [FromBody] CategoryDTO dto)
+        {
+            var isUpdated = _service.Update(id, dto);
+
+            if (!isUpdated) return NotFound();
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = _service.Delete(id);
+
+            if(!isDeleted) return NotFound();
+
+            return NoContent();
         }
     }
 }
