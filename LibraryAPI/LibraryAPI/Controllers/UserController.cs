@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
-using LibraryAPI.Models;
+using LibraryAPI.Models.User;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Controllers
 {
@@ -11,7 +10,7 @@ namespace LibraryAPI.Controllers
     [Route("api/users")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService
+        private readonly IUserService _userService;
 
         public UserController(IUserService userService)
         {
@@ -44,7 +43,7 @@ namespace LibraryAPI.Controllers
             return Created($"api/users/{id}", null);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public ActionResult UpdateUser([FromRoute] int id, [FromBody] UserUpdateDTO dto)
         {
             var isUpdated = _userService.Update(id, dto);
@@ -54,6 +53,7 @@ namespace LibraryAPI.Controllers
             return NotFound();
         }
 
+        [HttpDelete("{id}")]
         public ActionResult DeleteUser([FromRoute] int id)
         {
             var isDeleted = _userService.Delete(id);
