@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LibraryAPI.Models
+namespace LibraryAPI.Models.User
 {
     public class UserCreateDTO
     {
-        public int Id { get; set; } 
         [Required]
         [MaxLength(50)]
         public string Firstname { get; set; }

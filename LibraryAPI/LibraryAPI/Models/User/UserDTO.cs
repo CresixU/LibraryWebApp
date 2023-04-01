@@ -1,22 +1,19 @@
 ﻿using LibraryAPI.Entities;
-using System.ComponentModel.DataAnnotations;
 
-namespace LibraryAPI.Models
+namespace LibraryAPI.Models.User
 {
-    public class UserUpdateDTO
+    public class UserDTO
     {
         public int Id { get; set; }
-        [MaxLength(50)]
         public string Firstname { get; set; }
-        [MaxLength(50)]
         public string Lastname { get; set; }
-        [MaxLength(50)]
-        [EmailAddress]
         public string Email { get; set; }
-        public string Password { get; set; }
+
         public string City { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }
         public string PostalCode { get; set; }
+        public string Role { get; set; }
+        public List<Rent> Rents { get; set; }
     }
 }
