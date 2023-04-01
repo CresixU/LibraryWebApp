@@ -18,7 +18,7 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetAll()
+        public ActionResult<IEnumerable<UsersDTO>> GetAll()
         {
             var users = _userService.GetAll();
 
@@ -26,7 +26,7 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> Get([FromRoute] int id)
+        public ActionResult<UserDTO> Get([FromRoute] int id)
         {
             var user = _userService.GetById(id);
 
