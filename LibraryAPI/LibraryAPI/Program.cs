@@ -13,14 +13,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<LibrarySeeder>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<LibraryContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryConnectionString"))
     );
-builder.Services.AddControllers().AddJsonOptions(
+/*builder.Services.AddControllers().AddJsonOptions(
     option => option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
-    );
+    );*/
 
 var app = builder.Build();
 
