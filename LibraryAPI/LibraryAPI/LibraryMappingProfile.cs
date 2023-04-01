@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
-using LibraryAPI.Models;
+using LibraryAPI.Models.Book;
+using LibraryAPI.Models.Category;
+using LibraryAPI.Models.User;
 
 namespace LibraryAPI
 {
@@ -38,6 +40,13 @@ namespace LibraryAPI
                 .ForMember(a => a.Number, b => b.MapFrom(c => c.Address.Number))
                 .ForMember(a => a.PostalCode, b => b.MapFrom(c => c.Address.PostalCode))
                 .ForMember(a => a.Role, b => b.MapFrom(c => c.Role.Name));
+
+            CreateMap<Book, BookDTO>()
+                .ForMember(a => a.Category, b => b.MapFrom(c => c.Category.Name));
+
+            CreateMap<Category, CategoryDTO>();
+
+            CreateMap<Role, RoleDTO>();
         }
     }
 }
