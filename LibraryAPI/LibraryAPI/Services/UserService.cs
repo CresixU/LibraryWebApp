@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
-using LibraryAPI.Models;
+using LibraryAPI.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Services
