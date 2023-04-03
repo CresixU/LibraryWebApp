@@ -1,4 +1,4 @@
-﻿namespace LibraryAPI.Models.Category
+﻿namespace LibraryAPI.Models.Categories
 {
     public class CategoryDTO
     {

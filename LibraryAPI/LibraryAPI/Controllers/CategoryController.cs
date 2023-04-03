@@ -1,4 +1,4 @@
-﻿using LibraryAPI.Models.Category;
+﻿using LibraryAPI.Models.Categories;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

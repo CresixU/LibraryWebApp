@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
-using LibraryAPI.Models.Book;
-using LibraryAPI.Models.Category;
-using LibraryAPI.Models.Role;
-using LibraryAPI.Models.User;
+using LibraryAPI.Models.Books;
+using LibraryAPI.Models.Categories;
+using LibraryAPI.Models.Roles;
+using LibraryAPI.Models.Users;
 
 namespace LibraryAPI
 {

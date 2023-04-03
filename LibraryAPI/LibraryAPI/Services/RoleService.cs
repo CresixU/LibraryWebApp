@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
-using LibraryAPI.Models.Role;
+using LibraryAPI.Models.Roles;
 
 namespace LibraryAPI.Services
 {

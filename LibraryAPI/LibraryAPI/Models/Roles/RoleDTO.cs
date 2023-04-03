@@ -1,4 +1,4 @@
-﻿namespace LibraryAPI.Models.Role
+﻿namespace LibraryAPI.Models.Roles
 {
     public class RoleDTO
     {

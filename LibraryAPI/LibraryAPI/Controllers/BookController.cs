@@ -1,5 +1,5 @@
 ﻿using LibraryAPI.Entities;
-using LibraryAPI.Models.Book;
+using LibraryAPI.Models.Books;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

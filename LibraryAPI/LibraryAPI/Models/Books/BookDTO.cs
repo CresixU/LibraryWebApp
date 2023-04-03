@@ -1,6 +1,6 @@
 ﻿using LibraryAPI.Entities;
 
-namespace LibraryAPI.Models.Book
+namespace LibraryAPI.Models.Books
 {
     public class BookDTO
     {

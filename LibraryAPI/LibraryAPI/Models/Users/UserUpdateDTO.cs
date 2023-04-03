@@ -1,7 +1,7 @@
 ﻿using LibraryAPI.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace LibraryAPI.Models.User
+namespace LibraryAPI.Models.Users
 {
     public class UserUpdateDTO
     {
