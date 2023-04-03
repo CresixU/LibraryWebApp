@@ -2,6 +2,7 @@
 using LibraryAPI.Entities;
 using LibraryAPI.Models.Books;
 using LibraryAPI.Models.Categories;
+using LibraryAPI.Models.Rents;
 using LibraryAPI.Models.Roles;
 using LibraryAPI.Models.Users;
 
@@ -45,15 +46,23 @@ namespace LibraryAPI
             CreateMap<Book, BookDTO>()
                 .ForMember(a => a.Category, b => b.MapFrom(c => c.Category.Name));
 
-            CreateMap<BookCreateDTO, Book>()
-                .ForMember(b => b.Category.Id, x => x.MapFrom(dto => dto.CategoryId));
+            //CreateMap<BookCreateDTO, Book>().ForMember(b => b.Category.Id, x => x.MapFrom(dto => dto.CategoryId));
+            CreateMap<Book, BookCreateDTO>()
+                .ForMember(dto => dto.CategoryId, x => x.MapFrom(b => b.CategoryId))
+                .ReverseMap();
 
-            CreateMap<BookUpdateDTO, Book>()
-                .ForMember(b => b.Category.Id, x => x.MapFrom(dto => dto.CategoryId));
+            //CreateMap<BookUpdateDTO, Book>().ForMember(b => b.Category.Id, x => x.MapFrom(dto => dto.CategoryId));
+            CreateMap<Book, BookUpdateDTO>()
+                .ForMember(dto => dto.CategoryId, x => x.MapFrom(b => b.CategoryId))
+                .ReverseMap();
 
             CreateMap<Category, CategoryDTO>();
 
             CreateMap<Role, RoleDTO>();
+
+            CreateMap<Rent, RentDTO>();
+
+            CreateMap<RentCreateDTO, Rent>();
         }
     }
 }
