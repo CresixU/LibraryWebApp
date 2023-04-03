@@ -16,6 +16,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRentService, RentService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<LibraryContext>(
