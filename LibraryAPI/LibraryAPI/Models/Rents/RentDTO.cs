@@ -9,7 +9,7 @@ namespace LibraryAPI.Models.Rents
         public DateTime RentDate { get; set; }
         public DateTime ReturnDate { get; set; }
 
-        public UserDTO User { get; set; }
+        public string User { get; set; }
 
         public List<BookDTO> Books { get; set; }
     }

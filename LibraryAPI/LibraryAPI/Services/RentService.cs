@@ -10,8 +10,8 @@ namespace LibraryAPI.Services
     {
         IEnumerable<RentDTO> GetAll();
         IEnumerable<RentDTO> GetAllByUserId(int id);
-        int RentBooks(List<int> bookIds);
-        bool ReturnBooks(int rentId, List<int> bookIds);
+        int RentBooks(RentCreateDTO dto);
+        bool ReturnBooks(int rentId, RentReturnDTO dto);
     }
 
     public class RentService : IRentService
@@ -28,10 +28,10 @@ namespace LibraryAPI.Services
         public IEnumerable<RentDTO> GetAll()
         {
             var rents = _dbContext
-                .Rents
-                .Include(r => r.User)
-                .Include(r => r.Books)
-                .ToList();
+                        .Rents
+                        .Include(r => r.User)
+                        .Include(r => r.Books)
+                        .ToList();
 
             var dtos = _mapper.Map<List<RentDTO>>(rents);
 
@@ -51,40 +51,37 @@ namespace LibraryAPI.Services
             return dtos;
         }
 
-        public int RentBooks(List<int> bookIds)
+        public int RentBooks(RentCreateDTO dto)
         {
             var books = _dbContext
-                .Books
-                .Where(b => bookIds.Contains(b.Id))
-                .ToList();
+                        .Books
+                        .Where(b => dto.BookIds.Contains(b.Id))
+                        .ToList();
 
             if (books.Count == 0) return 0;
+            books.ForEach(b => b.IsAvailable = false);
 
-            var bookDtos = _mapper.Map<List<BookDTO>>(books);
-
-            var rentDto = new RentCreateDTO()
-            {
-                RentDate = DateTime.Now,
-                Books = bookDtos
-            };
-
-            var rent = _mapper.Map<Rent>(rentDto);
+            var rent = _mapper.Map<Rent>(dto);
+            rent.Books = books;
 
             _dbContext.Rents.Add(rent);
             _dbContext.SaveChanges();
 
             return rent.Id;
+
         }
 
-        public bool ReturnBooks(int rentId, List<int> bookIds)
+        public bool ReturnBooks(int id, RentReturnDTO dto)
         {
             var rent = _dbContext
                 .Rents
-                .FirstOrDefault(r => r.Id == rentId);
+                .Include(r => r.Books)
+                .FirstOrDefault(r => r.Id == id);
 
             if(rent is null) return false;
 
-            rent.ReturnDate = DateTime.Now;
+            rent.ReturnDate = dto.ReturnDate;
+            rent.Books.ForEach(b => b.IsAvailable = true);
             _dbContext.SaveChanges();
 
             return true;

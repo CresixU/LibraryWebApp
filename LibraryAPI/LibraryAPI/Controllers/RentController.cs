@@ -1,4 +1,5 @@
 ﻿using LibraryAPI.Entities;
+using LibraryAPI.Models.Rents;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,17 +34,17 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult RentBooks(List<int> bookIds)
+        public ActionResult RentBooks([FromBody]RentCreateDTO dto)
         {
-            var id = _service.RentBooks(bookIds);
+            var id = _service.RentBooks(dto);
             if (id == 0) return NoContent();
             return Created($"api/rents/{id}", null);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult ReturnBooks(int rentId, List<int> bookIds)
+        [HttpPut("{rentId}")]
+        public ActionResult ReturnBooks([FromRoute]int rentId, [FromBody]RentReturnDTO dto)
         {
-            var isUpdated = _service.ReturnBooks(rentId, bookIds);
+            var isUpdated = _service.ReturnBooks(rentId, dto);
             if(!isUpdated) return NotFound();
 
             return Ok();

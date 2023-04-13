@@ -60,9 +60,11 @@ namespace LibraryAPI
 
             CreateMap<Role, RoleDTO>();
 
-            CreateMap<Rent, RentDTO>();
+            CreateMap<Rent, RentDTO>()
+                .ForMember(dto => dto.User, x => x.MapFrom(r => (r.User.Firstname + ' ' + r.User.Lastname)));
 
-            CreateMap<RentCreateDTO, Rent>();
+            CreateMap<Rent, RentCreateDTO>()
+                .ReverseMap();
         }
     }
 }
