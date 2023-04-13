@@ -1,5 +1,6 @@
 ﻿using LibraryAPI.Entities;
 using System.Reflection.Metadata.Ecma335;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LibraryAPI
 {
@@ -20,6 +21,18 @@ namespace LibraryAPI
                 {
                     var users = GetUsers();
                     _dbContext.Users.AddRange(users);
+                    _dbContext.SaveChanges();
+                }
+                if(!_dbContext.Categories.Any())
+                {
+                    var categories = GetCategories();
+                    _dbContext.Categories.AddRange(categories);
+                    _dbContext.SaveChanges();
+                }
+                if(!_dbContext.Books.Any())
+                {
+                    var books = GetBooks();
+                    _dbContext.Books.AddRange(books);
                     _dbContext.SaveChanges();
                 }
             }
@@ -43,6 +56,34 @@ namespace LibraryAPI
                 }
             };
             return users;
+        }
+
+        private IEnumerable<Category> GetCategories()
+        {
+            var categories = new List<Category>()
+            {
+                new Category()
+                {
+                    Name = "Test"
+                }
+            };
+            return categories;
+        }
+
+        private IEnumerable<Book> GetBooks()
+        {
+            var books = new List<Book>()
+            {
+                new Book()
+                {
+                    Title = "Testowy tytuł",
+                    Author = "Adam Tester",
+                    IsAvailable = true,
+                    PublicationYear = 2023,
+                    CategoryId = 1
+                }
+            };
+            return books;
         }
         
     }
