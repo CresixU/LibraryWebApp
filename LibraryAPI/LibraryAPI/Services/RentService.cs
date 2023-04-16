@@ -62,7 +62,8 @@ namespace LibraryAPI.Services
                         .Where(b => dto.BookIds.Contains(b.Id))
                         .ToList();
 
-            if (books.Count == 0) return 0;
+            if (books.Count == 0)
+                throw new NotFoundException("Book not found");
             books.ForEach(b => b.IsAvailable = false);
 
             var rent = _mapper.Map<Rent>(dto);
