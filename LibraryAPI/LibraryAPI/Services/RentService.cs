@@ -40,13 +40,15 @@ namespace LibraryAPI.Services
 
         public IEnumerable<RentDTO> GetAllByUserId(int id)
         {
-            var rents = _dbContext
+            var user = _dbContext
                         .Users
                         .Include(u => u.Rents)
-                        .FirstOrDefault(u => u.Id == id)
-                        .Rents;
+                        .ThenInclude(r => r.Books)
+                        .ThenInclude(b => b.Category)
+                        .FirstOrDefault(u => u.Id == id);
+            if (user is null) return null;
 
-            var dtos = _mapper.Map<List<RentDTO>>(rents);
+            var dtos = _mapper.Map<List<RentDTO>>(user.Rents);
 
             return dtos;
         }
