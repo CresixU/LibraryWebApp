@@ -1,4 +1,4 @@
-﻿using LibraryAPI.Entities;
+﻿using LibraryAPI.Models.Rents;
 
 namespace LibraryAPI.Models.Users
 {
@@ -14,6 +14,6 @@ namespace LibraryAPI.Models.Users
         public string Number { get; set; }
         public string PostalCode { get; set; }
         public string Role { get; set; }
-        public List<Rent> Rents { get; set; }
+        public List<RentDTO> Rents { get; set; }
     }
 }
