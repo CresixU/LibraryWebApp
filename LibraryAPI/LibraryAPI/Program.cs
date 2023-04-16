@@ -1,9 +1,15 @@
 using LibraryAPI;
+using LibraryAPI.Middleware;
 using LibraryAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//NLog config
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 // Add services to the container.
 
@@ -17,6 +23,8 @@ builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRentService, RentService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<LibraryContext>(
