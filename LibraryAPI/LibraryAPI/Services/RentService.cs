@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
+using LibraryAPI.Exceptions;
 using LibraryAPI.Models.Books;
 using LibraryAPI.Models.Rents;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,8 @@ namespace LibraryAPI.Services
                         .ThenInclude(r => r.Books)
                         .ThenInclude(b => b.Category)
                         .FirstOrDefault(u => u.Id == id);
-            if (user is null) return null;
+            if (user is null)
+                throw new NotFoundException("User not found");
 
             var dtos = _mapper.Map<List<RentDTO>>(user.Rents);
 
