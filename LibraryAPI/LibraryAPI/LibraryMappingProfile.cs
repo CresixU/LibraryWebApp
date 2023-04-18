@@ -58,6 +58,9 @@ namespace LibraryAPI
 
             CreateMap<Category, CategoryDTO>();
 
+            CreateMap<Category, CategoryDTO>()
+                .ReverseMap();
+
             CreateMap<Role, RoleDTO>();
 
             CreateMap<Rent, RentDTO>()
