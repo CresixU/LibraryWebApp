@@ -16,21 +16,19 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Rent>> GetAll()
+        public ActionResult<IEnumerable<RentDTO>> GetAll()
         {
             var rents = _service.GetAll().Result;
 
             return Ok(rents);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Rent> GetAllByUserId([FromRoute] int id)
+        [HttpGet("{userId}")]
+        public ActionResult<IEnumerable<RentDTO>> GetAllByUserId([FromRoute] int userId)
         {
-            var rent = _service.GetAllByUserId(id).Result;
+            var rents = _service.GetAllByUserId(userId).Result;
 
-            if (rent is null) return NotFound();
-
-            return Ok(rent);
+            return Ok(rents);
         }
 
         [HttpPost]
