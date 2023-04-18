@@ -20,7 +20,7 @@ namespace LibraryAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<UsersDTO>> GetAll()
         {
-            var users = _userService.GetAll();
+            var users = _userService.GetAll().Result;
 
             return Ok(users);
         }
@@ -28,7 +28,7 @@ namespace LibraryAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<UserDTO> Get([FromRoute] int id)
         {
-            var user = _userService.GetById(id);
+            var user = _userService.GetById(id).Result;
 
             if (user is null) return NotFound();
 
@@ -38,7 +38,7 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public ActionResult CreateUser([FromBody] UserCreateDTO dto)
         {
-            var id = _userService.Create(dto);
+            var id = _userService.Create(dto).Result;
 
             return Created($"api/users/{id}", null);
         }
@@ -46,7 +46,7 @@ namespace LibraryAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateUser([FromRoute] int id, [FromBody] UserUpdateDTO dto)
         {
-            var isUpdated = _userService.Update(id, dto);
+            var isUpdated = _userService.Update(id, dto).Result;
 
             if (isUpdated) return Ok();
 
@@ -56,7 +56,7 @@ namespace LibraryAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteUser([FromRoute] int id)
         {
-            var isDeleted = _userService.Delete(id);
+            var isDeleted = _userService.Delete(id).Result;
 
             if (isDeleted) return NoContent();
 

@@ -17,7 +17,7 @@ namespace LibraryAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CategoryDTO>> GetAll()
         {
-            var categories = _service.GetAll();
+            var categories = _service.GetAll().Result;
 
             return Ok(categories);
         }
@@ -25,7 +25,7 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public ActionResult Create([FromBody] CategoryDTO dto)
         {
-            var id = _service.Create(dto);
+            var id = _service.Create(dto).Result;
 
             return Created($"api/categories/{id}", null);
         }
@@ -33,7 +33,7 @@ namespace LibraryAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] CategoryDTO dto)
         {
-            var isUpdated = _service.Update(id, dto);
+            var isUpdated = _service.Update(id, dto).Result;
 
             if (!isUpdated) return NotFound();
 
@@ -43,7 +43,7 @@ namespace LibraryAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var isDeleted = _service.Delete(id);
+            var isDeleted = _service.Delete(id).Result;
 
             if(!isDeleted) return NotFound();
 

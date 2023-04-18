@@ -18,7 +18,7 @@ namespace LibraryAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Rent>> GetAll()
         {
-            var rents = _service.GetAll();
+            var rents = _service.GetAll().Result;
 
             return Ok(rents);
         }
@@ -26,7 +26,7 @@ namespace LibraryAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<Rent> GetAllByUserId([FromRoute] int id)
         {
-            var rent = _service.GetAllByUserId(id);
+            var rent = _service.GetAllByUserId(id).Result;
 
             if (rent is null) return NotFound();
 
@@ -36,7 +36,7 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public ActionResult RentBooks([FromBody]RentCreateDTO dto)
         {
-            var id = _service.RentBooks(dto);
+            var id = _service.RentBooks(dto).Result;
             if (id == 0) return NoContent();
             return Created($"api/rents/{id}", null);
         }
@@ -44,7 +44,7 @@ namespace LibraryAPI.Controllers
         [HttpPut("{rentId}")]
         public ActionResult ReturnBooks([FromRoute]int rentId, [FromBody]RentReturnDTO dto)
         {
-            var isUpdated = _service.ReturnBooks(rentId, dto);
+            var isUpdated = _service.ReturnBooks(rentId, dto).Result;
             if(!isUpdated) return NotFound();
 
             return Ok();
