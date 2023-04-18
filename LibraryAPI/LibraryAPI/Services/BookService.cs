@@ -7,11 +7,11 @@ namespace LibraryAPI.Services
 {
     public interface IBookService
     {
-        IEnumerable<BookDTO> GetAll();
-        BookDTO Get(int id);
-        int Create(BookCreateDTO dto);
-        bool Update(int id, BookUpdateDTO dto);
-        bool Delete(int id);
+        Task<IEnumerable<BookDTO>> GetAll();
+        Task<BookDTO> Get(int id);
+        Task<int> Create(BookCreateDTO dto);
+        Task<bool> Update(int id, BookUpdateDTO dto);
+        Task<bool> Delete(int id);
     } 
 
     public class BookService : IBookService
@@ -25,45 +25,45 @@ namespace LibraryAPI.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<BookDTO> GetAll()
+        public async Task<IEnumerable<BookDTO>> GetAll()
         {
-            var books = _dbContext
+            var books = await _dbContext
                 .Books
                 .Include(b => b.Category)
-                .ToList();
+                .ToListAsync();
 
             var booksDto = _mapper.Map<List<BookDTO>>(books);
 
             return booksDto;
         }
 
-        public BookDTO Get(int id)
+        public async Task<BookDTO> Get(int id)
         {
-            var book = _dbContext
+            var book = await _dbContext
                 .Books
                 .Include(b => b.Category)
-                .FirstOrDefault(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             var bookDto = _mapper.Map<BookDTO>(book);
 
             return bookDto;
         }
 
-        public int Create(BookCreateDTO dto)
+        public async Task<int> Create(BookCreateDTO dto)
         {
             var newBook = _mapper.Map<Book>(dto);
-            _dbContext.Books.Add(newBook);
-            _dbContext.SaveChanges();
+            await _dbContext.Books.AddAsync(newBook);
+            await _dbContext.SaveChangesAsync();
 
             return newBook.Id;
         }
 
-        public bool Update(int id, BookUpdateDTO dto)
+        public async Task<bool> Update(int id, BookUpdateDTO dto)
         {
-            var oldBook = _dbContext
+            var oldBook = await _dbContext
                 .Books
                 .Include(b => b.Category)
-                .FirstOrDefault(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             if (oldBook is null) return false;
 
@@ -72,20 +72,20 @@ namespace LibraryAPI.Services
             oldBook.PublicationYear = dto.PublicationYear;
             oldBook.CategoryId = dto.CategoryId;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var book =_dbContext
+            var book = await _dbContext
                 .Books
-                .FirstOrDefault(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book is null) return false;
 
             _dbContext.Books.Remove(book);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
         }
     }

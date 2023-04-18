@@ -7,11 +7,11 @@ namespace LibraryAPI.Services
 {
     public interface IUserService
     {
-        IEnumerable<UsersDTO> GetAll();
-        UserDTO GetById(int id);
-        int Create(UserCreateDTO dto);
-        bool Update(int id, UserUpdateDTO dto);
-        bool Delete(int id);
+        Task<IEnumerable<UsersDTO>> GetAll();
+        Task<UserDTO> GetById(int id);
+        Task<int> Create(UserCreateDTO dto);
+        Task<bool> Update(int id, UserUpdateDTO dto);
+        Task<bool> Delete(int id);
 
     }
 
@@ -26,47 +26,47 @@ namespace LibraryAPI.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<UsersDTO> GetAll()
+        public async Task<IEnumerable<UsersDTO>> GetAll()
         {
-            var users = _dbContext
+            var users = await _dbContext
                 .Users
                 .Include(u => u.Address)
-                .ToList();
+                .ToListAsync();
 
             var usersDtos = _mapper.Map<List<UsersDTO>>(users);
 
             return usersDtos;
         }
 
-        public UserDTO GetById(int id)
+        public async Task<UserDTO> GetById(int id)
         {
-            var user = _dbContext
+            var user = await _dbContext
                 .Users
                 .Include(u => u.Address)
                 .Include(u => u.Role)
                 .Include(u => u.Rents)
-                .FirstOrDefault(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             var userDto = _mapper.Map<UserDTO>(user);
 
             return userDto;
         }
 
-        public int Create(UserCreateDTO dto)
+        public async Task<int> Create(UserCreateDTO dto)
         {
             var user = _mapper.Map<User>(dto);
             _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return user.Id;
         }
 
-        public bool Update(int id, UserUpdateDTO dto)
+        public async Task<bool> Update(int id, UserUpdateDTO dto)
         {
-            var user = _dbContext
+            var user = await _dbContext
                 .Users
                 .Include(u => u.Address)
-                .FirstOrDefault(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user is null) return false; 
 
@@ -78,22 +78,22 @@ namespace LibraryAPI.Services
             user.Address.Street = dto.Street;
             user.Address.Number = dto.Number;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
 
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var user = _dbContext
+            var user = await _dbContext
                 .Users
-                .FirstOrDefault(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null) return false;
 
             _dbContext.Users.Remove(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }

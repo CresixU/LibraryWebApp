@@ -9,10 +9,10 @@ namespace LibraryAPI.Services
 {
     public interface IRentService
     {
-        IEnumerable<RentDTO> GetAll();
-        IEnumerable<RentDTO> GetAllByUserId(int id);
-        int RentBooks(RentCreateDTO dto);
-        bool ReturnBooks(int rentId, RentReturnDTO dto);
+        Task<IEnumerable<RentDTO>> GetAll();
+        Task<IEnumerable<RentDTO>> GetAllByUserId(int id);
+        Task<int> RentBooks(RentCreateDTO dto);
+        Task<bool> ReturnBooks(int rentId, RentReturnDTO dto);
     }
 
     public class RentService : IRentService
@@ -26,27 +26,27 @@ namespace LibraryAPI.Services
             _dbContext = context;
         }
 
-        public IEnumerable<RentDTO> GetAll()
+        public async Task<IEnumerable<RentDTO>> GetAll()
         {
-            var rents = _dbContext
+            var rents = await _dbContext
                         .Rents
                         .Include(r => r.User)
                         .Include(r => r.Books)
-                        .ToList();
+                        .ToListAsync();
 
             var dtos = _mapper.Map<List<RentDTO>>(rents);
 
             return dtos;
         }
 
-        public IEnumerable<RentDTO> GetAllByUserId(int id)
+        public async Task<IEnumerable<RentDTO>> GetAllByUserId(int id)
         {
-            var user = _dbContext
+            var user = await _dbContext
                         .Users
                         .Include(u => u.Rents)
                         .ThenInclude(r => r.Books)
                         .ThenInclude(b => b.Category)
-                        .FirstOrDefault(u => u.Id == id);
+                        .FirstOrDefaultAsync(u => u.Id == id);
             if (user is null)
                 throw new NotFoundException("User not found");
 
@@ -55,12 +55,12 @@ namespace LibraryAPI.Services
             return dtos;
         }
 
-        public int RentBooks(RentCreateDTO dto)
+        public async Task<int> RentBooks(RentCreateDTO dto)
         {
-            var books = _dbContext
+            var books = await _dbContext
                         .Books
                         .Where(b => dto.BookIds.Contains(b.Id))
-                        .ToList();
+                        .ToListAsync();
 
             if (books.Count == 0)
                 throw new NotFoundException("Book not found");
@@ -70,24 +70,24 @@ namespace LibraryAPI.Services
             rent.Books = books;
 
             _dbContext.Rents.Add(rent);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return rent.Id;
 
         }
 
-        public bool ReturnBooks(int id, RentReturnDTO dto)
+        public async Task<bool> ReturnBooks(int id, RentReturnDTO dto)
         {
-            var rent = _dbContext
+            var rent = await _dbContext
                 .Rents
                 .Include(r => r.Books)
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if(rent is null) return false;
 
             rent.ReturnDate = dto.ReturnDate;
             rent.Books.ForEach(b => b.IsAvailable = true);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }

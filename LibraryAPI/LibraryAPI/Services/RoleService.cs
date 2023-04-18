@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
 using LibraryAPI.Models.Roles;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Services
 {
     public interface IRoleService
     {
-        IEnumerable<RoleDTO> GetAll();
-        int Create(RoleDTO dto);
-        bool Update(int id, RoleDTO dto);
-        bool Delete(int id);
+        Task<IEnumerable<RoleDTO>> GetAll();
+        Task<int> Create(RoleDTO dto);
+        Task<bool> Update(int id, RoleDTO dto);
+        Task<bool> Delete(int id);
     }
 
     public class RoleService : IRoleService
@@ -23,49 +24,49 @@ namespace LibraryAPI.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<RoleDTO> GetAll()
+        public async Task<IEnumerable<RoleDTO>> GetAll()
         {
-            var roles = _dbContext.Roles.ToList();
+            var roles = await _dbContext.Roles.ToListAsync();
 
             var dtos = _mapper.Map<List<RoleDTO>>(roles);
 
             return dtos;
         }
 
-        public int Create(RoleDTO dto)
+        public async Task<int> Create(RoleDTO dto)
         {
             var role = _mapper.Map<Role>(dto);
 
             _dbContext.Roles.Add(role);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return role.Id;
         }
 
-        public bool Update(int id, RoleDTO dto)
+        public async Task<bool> Update(int id, RoleDTO dto)
         {
-            var role = _dbContext
+            var role = await _dbContext
                 .Roles
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if (role is null) return false;
 
             role.Name = dto.Name;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var role = _dbContext
+            var role = await _dbContext
                 .Roles
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if (role is null) return false;
 
             _dbContext.Roles.Remove(role);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
         }
 

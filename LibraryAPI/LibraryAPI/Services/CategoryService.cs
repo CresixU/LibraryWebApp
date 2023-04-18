@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
 using LibraryAPI.Models.Categories;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Services
 {
     public interface ICategoryService
     {
-        IEnumerable<CategoryDTO> GetAll();
-        int Create(CategoryDTO dto);
-        bool Update(int id, CategoryDTO dto);
-        bool Delete(int id);
+        Task<IEnumerable<CategoryDTO>> GetAll();
+        Task<int> Create(CategoryDTO dto);
+        Task<bool> Update(int id, CategoryDTO dto);
+        Task<bool> Delete(int id);
     }
 
     public class CategoryService : ICategoryService
@@ -23,49 +24,49 @@ namespace LibraryAPI.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<CategoryDTO> GetAll()
+        public async Task<IEnumerable<CategoryDTO>> GetAll()
         {
-            var categories = _dbContext
+            var categories = await _dbContext
                 .Categories
-                .ToList();
+                .ToListAsync();
 
             var dtos = _mapper.Map<List<CategoryDTO>>(categories);
 
             return dtos;
         }
 
-        public int Create(CategoryDTO dto)
+        public async Task<int> Create(CategoryDTO dto)
         {
             var category = _mapper.Map<Category>(dto);
             _dbContext.Categories.Add(category);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return category.Id;
         }
 
-        public bool Update(int id, CategoryDTO dto)
+        public async Task<bool> Update(int id, CategoryDTO dto)
         {
-            var category = _dbContext
+            var category = await _dbContext
                 .Categories
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (category is null) return false;
 
             category.Name = dto.Name;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var category = _dbContext
+            var category = await _dbContext
                 .Categories
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if(category is null) return false;
 
             _dbContext.Categories.Remove(category);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
         }
     }
