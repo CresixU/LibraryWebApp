@@ -9,6 +9,15 @@ header {
 }
 aside {
   background-color: azure;
+  display: inline-flex;
+  padding: 40px 20px;
 }
-
+main {
+  display: inline-flex;
+  padding: 40px 20px;
+}
+main table td,
+main table th {
+  padding: 10px;
+}
 
