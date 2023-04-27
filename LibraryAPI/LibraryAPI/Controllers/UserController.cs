@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Users;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UsersDTO>> GetAll()
+        public ActionResult<IEnumerable<UsersDTO>> GetAll([FromQuery]LibraryQuery query)
         {
-            var users = _userService.GetAll().Result;
+            var users = _userService.GetAll(query).Result;
 
             return Ok(users);
         }

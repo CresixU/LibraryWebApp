@@ -1,4 +1,5 @@
 ﻿using LibraryAPI.Entities;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Books;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BookDTO>> GetAll()
+        public ActionResult<IEnumerable<BookDTO>> GetAll([FromQuery]LibraryQuery query)
         {
-            var books = _service.GetAll().Result;
+            var books = _service.GetAll(query).Result;
             return Ok(books);
         }
 

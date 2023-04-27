@@ -1,4 +1,5 @@
 ﻿using LibraryAPI.Entities;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Rents;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RentDTO>> GetAll()
+        public ActionResult<IEnumerable<RentDTO>> GetAll([FromQuery]LibraryQuery query)
         {
-            var rents = _service.GetAll().Result;
+            var rents = _service.GetAll(query).Result;
 
             return Ok(rents);
         }
