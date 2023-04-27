@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Books;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ namespace LibraryAPI.Services
 {
     public interface IBookService
     {
-        Task<IEnumerable<BookDTO>> GetAll();
+        Task<PageResult<BookDTO>> GetAll(LibraryQuery query);
         Task<BookDTO> Get(int id);
         Task<int> Create(BookCreateDTO dto);
         Task<bool> Update(int id, BookUpdateDTO dto);
@@ -25,16 +26,27 @@ namespace LibraryAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<BookDTO>> GetAll()
+        public async Task<PageResult<BookDTO>> GetAll(LibraryQuery query)
         {
-            var books = await _dbContext
+            var baseQuery = await _dbContext
                 .Books
                 .Include(b => b.Category)
+                .Where(b => query.SearchPhrase == null || (b.Title.ToLower().Contains(query.SearchPhrase.ToLower())
+                                                        || b.Author.ToLower().Contains(query.SearchPhrase.ToLower())))
                 .ToListAsync();
+
+            var books = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
+                .ToList();
+
+            var totalItems = baseQuery.Count();
 
             var booksDto = _mapper.Map<List<BookDTO>>(books);
 
-            return booksDto;
+            var result = new PageResult<BookDTO>(booksDto, totalItems, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public async Task<BookDTO> Get(int id)

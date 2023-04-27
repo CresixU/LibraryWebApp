@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
 using LibraryAPI.Exceptions;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Books;
 using LibraryAPI.Models.Rents;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace LibraryAPI.Services
 {
     public interface IRentService
     {
-        Task<IEnumerable<RentDTO>> GetAll();
+        Task<PageResult<RentDTO>> GetAll(LibraryQuery query);
         Task<IEnumerable<RentDTO>> GetAllByUserId(int id);
         Task<int> RentBooks(RentCreateDTO dto);
         Task<bool> ReturnBooks(int rentId, RentReturnDTO dto);
@@ -26,17 +27,28 @@ namespace LibraryAPI.Services
             _dbContext = context;
         }
 
-        public async Task<IEnumerable<RentDTO>> GetAll()
+        public async Task<PageResult<RentDTO>> GetAll(LibraryQuery query)
         {
-            var rents = await _dbContext
+            var baseQuery = await _dbContext
                         .Rents
                         .Include(r => r.User)
                         .Include(r => r.Books)
+                        .Where(r => query.SearchPhrase == null || ((r.User.Firstname + ' ' + r.User.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
+                                                                || r.User.Email.ToLower().Contains(query.SearchPhrase.ToLower())))
                         .ToListAsync();
+
+            var rents = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
+                .ToList();
+
+            var totalItems = baseQuery.Count();
 
             var dtos = _mapper.Map<List<RentDTO>>(rents);
 
-            return dtos;
+            var result = new PageResult<RentDTO>(dtos, totalItems, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public async Task<IEnumerable<RentDTO>> GetAllByUserId(int id)

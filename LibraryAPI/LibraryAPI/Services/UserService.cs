@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Entities;
+using LibraryAPI.Models;
 using LibraryAPI.Models.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ namespace LibraryAPI.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<UsersDTO>> GetAll();
+        Task<PageResult<UsersDTO>> GetAll(LibraryQuery query);
         Task<UserDTO> GetById(int id);
         Task<int> Create(UserCreateDTO dto);
         Task<bool> Update(int id, UserUpdateDTO dto);
@@ -26,16 +27,27 @@ namespace LibraryAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UsersDTO>> GetAll()
+        public async Task<PageResult<UsersDTO>> GetAll(LibraryQuery query)
         {
-            var users = await _dbContext
+            var baseQuery = await _dbContext
                 .Users
                 .Include(u => u.Address)
+                .Where(u => query.SearchPhrase == null || ((u.Firstname + ' ' + u.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
+                                                                || u.Email.ToLower().Contains(query.SearchPhrase.ToLower())))
                 .ToListAsync();
+
+            var users = baseQuery
+                .Skip(query.PageSize * (query.PageSize - 1))
+                .Take(query.PageSize)
+                .ToList();
+
+            var totalItems = baseQuery.Count();
 
             var usersDtos = _mapper.Map<List<UsersDTO>>(users);
 
-            return usersDtos;
+            var result = new PageResult<UsersDTO>(usersDtos, totalItems, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public async Task<UserDTO> GetById(int id)
