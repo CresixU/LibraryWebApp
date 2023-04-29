@@ -1,8 +1,8 @@
 <template>
 <div>
-    <label for="category">Kategoria</label>
+    <label for="category">Category</label>
     <select name="category" id="category">
-        <option selected disabled>Wybierz</option>
+        <option selected>Select</option>
         <option :value="category.name" v-for="category in categories" v-bind:key="category.name">{{ category.name }}</option>
     </select>
 </div>
