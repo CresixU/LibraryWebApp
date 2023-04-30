@@ -37,7 +37,7 @@ namespace LibraryAPI.Services
                 .ToListAsync();
 
             var users = baseQuery
-                .Skip(query.PageSize * (query.PageSize - 1))
+                .Skip(query.PageSize * (query.PageNumber - 1))
                 .Take(query.PageSize)
                 .ToList();
 
