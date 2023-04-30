@@ -1,10 +1,13 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router.js'
 
 import './assets/main.css'
 
-//createApp(App).mount('#app')
 const app = createApp(App)
+
+app.use(router)
+
 //global variable
 app.config.globalProperties.$API_URL = `https://localhost:7054`
 
