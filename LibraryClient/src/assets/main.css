@@ -34,6 +34,15 @@ body {
   margin: 0;
   padding: 0;
 }
+a {
+  text-decoration: none;
+}
+a > * {
+  transition: all 0.3s;
+}
+a:hover > * {
+  color: #10d7e1;
+}
 header {
   font-family:fantasy;
   background-color: beige;
