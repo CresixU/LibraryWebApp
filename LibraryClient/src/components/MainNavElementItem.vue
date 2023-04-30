@@ -1,8 +1,8 @@
 <template>
-    <div class="col nav-element">
+    <div>
         <i :class="classProp"></i>
         <span><slot></slot></span>
-      </div>
+    </div>
 </template>
 <script>
 export default {
