@@ -23,12 +23,18 @@
         </tr>
     </tbody>
 </table>
-<div class="w-100 pagination">
+<div class="w-100 pagination" style="justify-content:center">
     <button
-     class="btn-main"
-     style="margin-left:auto"
-      v-on:click="fetchData(page+1,search,category)">
-      Fetch more!
+     class="btn-main mx-2"
+      v-on:click="fetchData(page-1,search,category)"
+      :disabled="page <= 1">
+      &#60;&#60;
+    </button>
+    <button
+     class="btn-main mx-2"
+      v-on:click="fetchData(page+1,search,category)"
+      :disabled="page >= data.totalPages">
+      &#62;&#62;
     </button>
 </div>
 </template>
@@ -38,22 +44,27 @@ export default {
     data() {
         return {
             books: [],
-            data: null,
+            data: [],
             page: 1,
             search: "",
             category: ""
         }
+    },
+    props: {
+        categoryProp: String,
+        searchPhrase: String
     },
     methods: {
         async fetchData(p, search = "", category = "") {
             this.page = p
             this.search = search
             this.category = category
-            console.log(this.page)
-            const url = `${this.$API_URL}/api/books?PageNumber=${this.page}&PageSize=10`
+            var url = `${this.$API_URL}/api/books?PageNumber=${this.page}&PageSize=10`
+            if(search != '') url += `&SearchPhrase=${search}`
+            if(category != '') url += `&Category=${category}`
             const response = await fetch(url)
             this.data = await response.json()
-            this.books.push(...this.data.items)
+            this.books = this.data.items
         },
         Rent(bookId) {
             alert("open modal :)")
@@ -61,6 +72,14 @@ export default {
     },
     created() {
         this.fetchData(1)
+    },
+    watch: {
+        searchPhrase() {
+            this.fetchData(this.page, this.searchPhrase, this.category)
+        },
+        categoryProp() {
+            this.fetchData(this.page, this.search, this.categoryProp)
+        }
     }
 }
 </script>
