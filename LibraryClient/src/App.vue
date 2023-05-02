@@ -11,13 +11,13 @@
   <main>
     <div class="row nav w-100">
       <div class="col"></div>
-      <router-link to="/" class="col nav-element">
+      <router-link to="/users" class="col nav-element">
         <MainNavElementItem classProp="bi bi-people">Users</MainNavElementItem>
       </router-link>
       <router-link to="/books" class="col nav-element">
         <MainNavElementItem classProp="bi bi-journal">Books</MainNavElementItem>
       </router-link>
-      <router-link to="/" class="col nav-element">
+      <router-link to="/rents" class="col nav-element">
         <MainNavElementItem classProp="bi bi-card-list">Rents</MainNavElementItem>
       </router-link>
     </div>
