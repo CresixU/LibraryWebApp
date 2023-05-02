@@ -8,19 +8,19 @@
         </div>
       </div>
       <div class="col">
-        <BookTable/>
+        <MainBooksTable/>
       </div>
 </template>
 <script>
 import Categories from '../components/filters/Categories.vue';
 import SearchBox from '../components/filters/SearchBox.vue';
-import BookTable from '../components/BookTable.vue';
+import MainBooksTable from '../components/MainBooksTable.vue';
 
 export default {
   components: {
     Categories,
     SearchBox,
-    BookTable,
+    MainBooksTable,
   }
 }
 </script>
