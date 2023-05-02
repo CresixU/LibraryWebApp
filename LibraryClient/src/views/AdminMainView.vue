@@ -1,0 +1,3 @@
+<template>
+    <h2 class="text-center">Hello</h2>
+</template>
