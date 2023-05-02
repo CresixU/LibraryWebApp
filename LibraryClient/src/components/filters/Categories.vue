@@ -1,8 +1,10 @@
 <template>
 <div>
     <label for="category">Category</label>
-    <select name="category" id="category">
-        <option selected>Select</option>
+    <select name="category" id="category"
+    v-model="category"
+    @change="emitSelectCategory">
+        <option value="" selected>Select</option>
         <option :value="category.name" v-for="category in categories" v-bind:key="category.name">{{ category.name }}</option>
     </select>
 </div>
@@ -12,7 +14,8 @@
 export default {
     data() {
         return {
-            categories: null
+            categories: null,
+            category: ''
         }
     },
     methods: {
@@ -20,9 +23,11 @@ export default {
             const url = `${this.$API_URL}/api/categories`
             const response = await fetch(url)
             this.categories = await response.json()
+        },
+        emitSelectCategory() {
+            this.$emit('category', this.category)
         }
     },
-
     created() {
         this.fetchData()
     }

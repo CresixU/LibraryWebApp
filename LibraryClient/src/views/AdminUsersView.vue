@@ -3,11 +3,15 @@
         <h3 class="text-center">Filters</h3>
         <SearchBox class="my-3" @searchPhrase="handleSearchPhrase"/>
         <div>
-          <button class="btn-main my-3 d-block px-4" style="margin-left: auto">Search</button>
+          <button
+           class="btn-main my-3 d-block px-4"
+            style="margin-left: auto"
+            v-on:click="handleButtonClick"
+            >Search</button>
         </div>
       </div>
       <div class="col">
-        <MainUsersTable :searchPhrase="searchPhrase"/>
+        <MainUsersTable :searchPhrase="searchPhraseTable"/>
       </div>
 </template>
 
@@ -21,12 +25,16 @@ export default {
     },
     data() {
       return {
-        searchPhrase: ''
+        searchPhrase: '',
+        searchPhraseTable: ''
       }
     },
     methods: {
       handleSearchPhrase(searchPhrase) {
         this.searchPhrase = searchPhrase
+      },
+      handleButtonClick() {
+        this.searchPhraseTable = this.searchPhrase
       }
     }
 }
