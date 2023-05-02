@@ -3,10 +3,10 @@
 A simple CRUD application that allow to manage a library only as a employee.
 
 ## Frontend - LibraryClient
-**Stack: ** Vue3, Bootstrap
+**Stack:** Vue3, Bootstrap
 
 ## Backend - LibraryApi
-**Stack: ** ASP.NET Core (C#)
+**Stack:** ASP.NET Core (C#)
 
 **Libraries**
 AutoMapper
