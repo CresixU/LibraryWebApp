@@ -15,16 +15,22 @@
                 <td>{{ user.firstname }} {{ user.lastname }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.city }} {{ user.street }} {{ user.number }}</td>
-                <td><button data-content="Brak" class="btn-main">Brak</button></td>
+                <td><button class="btn-main">Profile</button></td>
             </tr>
         </tbody>
     </table>
-    <div class="w-100 pagination">
+    <div class="w-100 pagination" style="justify-content:center">
         <button
-         class="btn-main"
-         style="margin-left:auto"
-          v-on:click="fetchData(page+1,search,category)">
-          Fetch more!
+         class="btn-main mx-2"
+          v-on:click="fetchData(page-1,search)"
+          :disabled="page <= 1">
+          &#60;&#60;
+        </button>
+        <button
+         class="btn-main mx-2"
+          v-on:click="fetchData(page+1,search)"
+          :disabled="page >= data.totalPages">
+          &#62;&#62;
         </button>
     </div>
 </template>
@@ -33,7 +39,9 @@ export default {
     data() {
         return {
             users: [],
-            data: []
+            data: [],
+            page: 1,
+            search: ''
         }
         
     },
@@ -41,14 +49,25 @@ export default {
         async fetchData(p, search = "") {
             this.page = p
             this.search = search
-            const url = `${this.$API_URL}/api/users?PageNumber=${this.page}&PageSize=10`
+            var url = `${this.$API_URL}/api/users?PageNumber=${this.page}&PageSize=10`
+            if(search != '') { 
+                url += `&SearchPhrase=${search}`
+            }
             const response = await fetch(url)
             this.data = await response.json()
-            this.users.push(...this.data.items)
+            this.users = this.data.items
         },
+    },
+    props: {
+        searchPhrase: String
     },
     created() {
         this.fetchData(1)
+    },
+    watch: {
+        searchPhrase() {
+            this.fetchData(this.page, this.searchPhrase)
+        }
     }
 }
 </script>
