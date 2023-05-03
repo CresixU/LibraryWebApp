@@ -11,9 +11,9 @@ Vue3 Router
 ## Backend - LibraryApi
 **Stack:** ASP.NET Core (C#)
 
-**Libraries**
-AutoMapper
-EntityFramework
+**Libraries**<br>
+AutoMapper<br>
+EntityFramework<br>
 NLOG
 
 ## How to start?
