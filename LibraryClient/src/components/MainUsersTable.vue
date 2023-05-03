@@ -15,7 +15,11 @@
                 <td>{{ user.firstname }} {{ user.lastname }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.city }} {{ user.street }} {{ user.number }}</td>
-                <td><button class="btn-main">Profile</button></td>
+                <td>
+                    <router-link :to="'user/'+user.id">
+                        <button class="btn-main">Profile</button>
+                    </router-link>
+                </td>
             </tr>
         </tbody>
     </table>
