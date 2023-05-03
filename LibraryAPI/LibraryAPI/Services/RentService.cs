@@ -11,7 +11,7 @@ namespace LibraryAPI.Services
     public interface IRentService
     {
         Task<PageResult<RentDTO>> GetAll(LibraryQuery query);
-        Task<IEnumerable<RentDTO>> GetAllByUserId(int id);
+        Task<PageResult<RentDTO>> GetAllByUserId(int id, LibraryQuery query);
         Task<int> RentBooks(RentCreateDTO dto);
         Task<bool> ReturnBooks(int rentId, RentReturnDTO dto);
     }
@@ -51,7 +51,7 @@ namespace LibraryAPI.Services
             return result;
         }
 
-        public async Task<IEnumerable<RentDTO>> GetAllByUserId(int id)
+        public async Task<PageResult<RentDTO>> GetAllByUserId(int id, LibraryQuery query)
         {
             var user = await _dbContext
                         .Users
@@ -62,9 +62,18 @@ namespace LibraryAPI.Services
             if (user is null)
                 throw new NotFoundException("User not found");
 
+            var rents = user.Rents
+                            .Skip(query.PageSize * (query.PageNumber - 1))
+                            .Take(query.PageSize)
+                            .ToList();
+
+            var totalItems = user.Rents.Count();
+
             var dtos = _mapper.Map<List<RentDTO>>(user.Rents);
 
-            return dtos;
+            var result = new PageResult<RentDTO>(dtos, totalItems, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public async Task<int> RentBooks(RentCreateDTO dto)

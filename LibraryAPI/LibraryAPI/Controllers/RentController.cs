@@ -25,9 +25,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet("{userId}")]
-        public ActionResult<IEnumerable<RentDTO>> GetAllByUserId([FromRoute] int userId)
+        public ActionResult<IEnumerable<RentDTO>> GetAllByUserId([FromRoute] int userId, [FromQuery]LibraryQuery query)
         {
-            var rents = _service.GetAllByUserId(userId).Result;
+            var rents = _service.GetAllByUserId(userId, query).Result;
 
             return Ok(rents);
         }
