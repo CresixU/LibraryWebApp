@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AdminUsersView from './views/AdminUsersView.vue'
 import AdminRentsView from './views/AdminRentsView.vue'
 import AdminMainView from './views/AdminMainView.vue'
+import AdminUsersProfileView from './views/AdminUsersProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,12 @@ const router = createRouter({
     {
       path: '/users',
       name: 'users',
-      component: AdminUsersView
+      component: AdminUsersView,
+    },
+    {
+      path: '/user/:id',
+      name: 'userProfile',
+      component: AdminUsersProfileView
     },
     {
       path: '/books',
