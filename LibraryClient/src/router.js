@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminUsersView from './views/AdminUsersView.vue'
+import AdminBooksView from './views/AdminBooksView.vue'
 import AdminRentsView from './views/AdminRentsView.vue'
-import AdminMainView from './views/AdminMainView.vue'
 import AdminUsersProfileView from './views/AdminUsersProfileView.vue'
+import AdminPanelView from './views/AdminPanelView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,7 +11,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      component: AdminMainView
+      // route level code-splitting
+      // this generates a separate chunk (<name>.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('./views/AdminMainView.vue')
     },
     {
       path: '/users',
@@ -25,15 +29,17 @@ const router = createRouter({
     {
       path: '/books',
       name: 'books',
-      // route level code-splitting
-      // this generates a separate chunk (<name>.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('./views/AdminBooksView.vue')
+      component: AdminBooksView
     },
     {
         path: '/rents',
         name: 'rents',
-        component: AdminRentsView,
+        component: AdminRentsView
+    },
+    {
+      path: '/panel',
+      name: 'panel',
+      component: AdminPanelView
     }
   ]
 })
