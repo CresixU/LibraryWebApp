@@ -1,129 +1,137 @@
 :root {
-  --main-color: #712cf9;;
-  --second-color: #3e00b1;
-  --main-gradient: linear-gradient(to left, #712cf9, #4c0bce);
-  --grey-dark: #e6eaff;
-  --grey-light: #e8dfff;
+   --main-color: #712cf9;;
+   --second-color: #3e00b1;
+   --main-gradient: linear-gradient(to left, #712cf9, #4c0bce);
+   --grey-dark: #e6eaff;
+   --grey-light: #e8dfff;
 }
 
 @font-face {
-  font-family: "Acme";
-  src: local("Acme"),
+   font-family: "Acme";
+   src: local("Acme"),
         url(../fonts/Acme-Regular.ttf) format("truetype");
 }
 .row {
-  margin: 0px !important;
+   margin: 0px !important;
 }
 .btn-main {
-  border-radius: 10px;
-  border: none;
-  background: var(--main-gradient);
-  color: white;
-  font-weight: 500;
-  padding: 3px 10px;
-  transition: all 0.3s;
+   border-radius: 10px;
+   border: none;
+   background: var(--main-gradient);
+   color: white;
+   font-weight: 500;
+   padding: 3px 10px;
+   transition: all 0.3s;
 }
 .btn-main:disabled {
-  background: grey;
+   background: grey;
 }
 .btn-main:hover {
-  filter:saturate(1.5);
+   filter:saturate(1.5);
 }
 
 body {
-  margin: 0;
-  padding: 0;
+   margin: 0;
+   padding: 0;
 }
 a {
-  text-decoration: none;
+   text-decoration: none;
 }
 a > * {
-  transition: all 0.3s;
+   transition: all 0.3s;
 }
 a:hover > * {
-  color: #10d7e1;
+   color: #10d7e1;
 }
 header {
-  font-family:fantasy;
-  background-color: beige;
-  padding: 10px;
-  font-size: 36px;
-  color: white;
-  background: var(--main-gradient);
+   font-family:fantasy;
+   background-color: beige;
+   padding: 10px;
+   font-size: 36px;
+   color: white;
+   background: var(--main-gradient);
 }
 header .logo {
-  font-family: "Acme";
+   font-family: "Acme";
 }
 main {
-  display: block;
-  width: 100%;
-  max-width: 1280px;
-  margin: 150px auto 0 auto;
-  border-radius: 15px 15px 0px 0px;
-  background-color: var(--grey-light);
+   display: block;
+   width: 100%;
+   max-width: 1280px;
+   margin: 150px auto 0 auto;
+   border-radius: 15px 15px 0px 0px;
+   background-color: var(--grey-light);
 }
-main  .nav {
-  background: var(--main-gradient);
-  border-radius: 15px 15px 0px 0px;
-  padding: 5px 10px;
+main .nav {
+   background: var(--main-gradient);
+   border-radius: 15px 15px 0px 0px;
+   padding: 5px 10px;
 }
 main .nav .nav-element {
-  color: white;
-  font-size: 25px;
+   color: white;
+   font-size: 25px;
 }
 main .nav .nav-element i {
-  font-size: 35px;
-  margin-right: 10px;
+   font-size: 35px;
+   margin-right: 10px;
 }
 main .nav .nav-element span {
-  position: relative;
-  bottom: 5px;
+   position: relative;
+   bottom: 5px;
 }
 main table {
-  width: 100%;
-  border-radius: 15px 15px 0px 0px;
+   width: 100%;
+   border-radius: 15px 15px 0px 0px;
 }
 main table tr:first-child {
-  color: white;
-  background-color: #C1A8C1;
+   color: white;
+   background-color: #C1A8C1;
 }
 main table th:first-child {
-  border-radius: 15px 0 0 0;
+   border-radius: 15px 0 0 0;
 }
 main table th:last-child {
-  border-radius: 0 15px 0 0;
+   border-radius: 0 15px 0 0;
 }
 main table td,
 main table th {
-  padding: 10px;
+   padding: 10px;
 }
 main table tr td {
-  background-color: #EEEEEE;
-  color: black;
+   background-color: #EEEEEE;
+   color: black;
 }
 main table+.pagination {
-  background-color: #C1A8C1;
-  padding: 6px 12px;
+   background-color: #C1A8C1;
+   padding: 6px 12px;
 }
 main .filters {
-  max-width: 300px;
-  padding: 0px 20px;
+   max-width: 300px;
+   padding: 0px 20px;
 }
 .filters label {
-  display: block;
-  position: relative;
-  left: 10px;
+   display: block;
+   position: relative;
+   left: 10px;
 }
 .filters input,
 .filters select {
-  width: 100%;
-  border: none;
-  border-radius: 25px;
-  padding: 6px 12px;
+   width: 100%;
+   border: none;
+   border-radius: 25px;
+   padding: 6px 12px;
 }
 .button {
-  display: block;
+   display: block;
+   border: none;
 }
 .button:hover {
-  cursor: pointer;
+   cursor: pointer;
+}
+.button:disabled {
+   cursor: default;
+}
+.button:disabled > i {
+   color: grey !important;
+   cursor: default;
 }
