@@ -48,5 +48,14 @@ namespace LibraryAPI.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{rentId}")]
+        public ActionResult DeleteRent([FromRoute]int rentId)
+        {
+            var isDeleted = _service.DeleteRent(rentId).Result;
+            if (!isDeleted) return NotFound();
+
+            return NoContent();
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace LibraryAPI.Services
         Task<PageResult<RentDTO>> GetAllByUserId(int id, LibraryQuery query);
         Task<int> RentBooks(RentCreateDTO dto);
         Task<bool> ReturnBooks(int rentId, RentReturnDTO dto);
+        Task<bool> DeleteRent(int rentId);
     }
 
     public class RentService : IRentService
@@ -108,6 +109,21 @@ namespace LibraryAPI.Services
 
             rent.ReturnDate = dto.ReturnDate;
             rent.Books.ForEach(b => b.IsAvailable = true);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteRent(int rentId)
+        {
+            var rent = await _dbContext
+                .Rents
+                .FirstOrDefaultAsync(r => r.Id == rentId);
+
+            if (rent is null) return false;
+            if (rent.ReturnDate is null) return false;
+
+            _dbContext.Rents.Remove(rent);
             await _dbContext.SaveChangesAsync();
 
             return true;
