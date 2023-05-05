@@ -87,7 +87,9 @@ namespace LibraryAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<int>("PublicationYear")
                         .HasMaxLength(4)
