@@ -13,6 +13,7 @@ Vue3 Router
 
 **Libraries**<br>
 AutoMapper<br>
+LINQ<br>
 EntityFramework<br>
 NLOG
 
