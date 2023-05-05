@@ -28,6 +28,7 @@ namespace LibraryAPI.Services
         {
             var categories = await _dbContext
                 .Categories
+                .OrderBy(c => c.Name)
                 .ToListAsync();
 
             var dtos = _mapper.Map<List<CategoryDTO>>(categories);
@@ -61,9 +62,11 @@ namespace LibraryAPI.Services
         {
             var category = await _dbContext
                 .Categories
+                .Include(c => c.Books)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if(category is null) return false;
+            if(category.Books.Any()) return false;
 
             _dbContext.Categories.Remove(category);
             await _dbContext.SaveChangesAsync();
