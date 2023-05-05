@@ -31,9 +31,11 @@ namespace LibraryAPI
                 eb.Property(b => b.Author).HasMaxLength(50).IsRequired();
                 eb.Property(b => b.Title).HasMaxLength(100).IsRequired();
                 eb.Property(b => b.PublicationYear).HasMaxLength(4);
+                eb.Property(b => b.IsAvailable).HasDefaultValue(true);
 
                 eb.HasMany(b => b.Rents)
                     .WithMany(re => re.Books);
+
                 eb.HasOne(b => b.Category)
                     .WithMany(c => c.Books)
                     .HasForeignKey(b => b.CategoryId);
