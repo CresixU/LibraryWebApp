@@ -1,4 +1,22 @@
 <template>
+<ModalChoice 
+    modalId="modal_delete"
+    title="Delete rent"
+    btnYes="Yes"
+    btnNo="Cancel"
+    :trueData="clickedRent"
+    v-on:CallParentTrueAction="ModalDeleteAction">
+    Do you want to delete rent with id: {{clickedRent}}?
+</ModalChoice>
+<ModalChoice 
+    modalId="modal_return"
+    title="Return rent"
+    btnYes="Yes"
+    btnNo="Cancel"
+    :trueData="clickedRent"
+    v-on:CallParentTrueAction="ModalRentReturnAction">
+    Do you want to return all books? Rent id: {{clickedRent}}
+</ModalChoice>
 <table>
     <thead>
         <tr>
@@ -7,7 +25,7 @@
             <th>Books</th>
             <th>Rent date</th>
             <th>Return date</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -19,7 +37,21 @@
             </td>
             <td>{{ ConvertDateTime(rent.rentDate) }}</td>
             <td>{{ ConvertDateTime(rent.returnDate) }}</td>
-            <td><button class="btn-main" :disabled="rent.returnDate != null">Return</button></td>
+            <td>
+                <button 
+                class="btn-main" 
+                :disabled="rent.returnDate != null"
+                @click="ModalRentReturn(rent.id)"
+                >Return</button>
+            </td>
+            <td>
+                <button
+                class="button"
+                :disabled="rent.returnDate == null"
+                v-on:click="ModalDelete(rent.id)">
+                    <i class="bi bi-trash-fill button" style="color: #e43a4d; font-size: 20px"></i>
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -39,13 +71,19 @@
 </div>
 </template>
 <script>
+import ModalChoice from './Modals/ModalChoice.vue'
+
 export default {
+    components: {
+        ModalChoice
+    },
     data() {
         return {
             rents: [],
             data: [],
             page: 1,
-            search: ''
+            search: '',
+            clickedRent: ''
         }
     },
     props: {
@@ -65,6 +103,29 @@ export default {
             if(datetime == null) return ''
             var result = datetime.substr(0,10) + ' ' + datetime.substr(11,5)
             return result
+        },
+        ModalRentReturn(id) {
+            this.clickedRent = id
+            var myModal = new bootstrap.Modal(document.getElementById('modal_return'))
+            myModal.toggle()
+        },
+        async ModalRentReturnAction(id) {
+            console.log("Returning rent id: "+id)
+            const url = `${this.$API_URL}/api/rents/${id}`
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({id})
+            })
+            console.log(response)
+        },
+        ModalDelete(id) {
+            this.clickedRent = id
+            var myModal = new bootstrap.Modal(document.getElementById('modal_delete'))
+            myModal.toggle()
+        },
+        ModalDeleteAction(id) {
+            console.log("Deleting id: "+id)
         }
     },
     created() {
