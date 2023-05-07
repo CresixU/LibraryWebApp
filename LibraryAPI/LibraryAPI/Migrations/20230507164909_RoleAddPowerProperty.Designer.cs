@@ -4,6 +4,7 @@ using LibraryAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20230507164909_RoleAddPowerProperty")]
+    partial class RoleAddPowerProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,11 +161,6 @@ namespace LibraryAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsImmutable")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -181,30 +179,26 @@ namespace LibraryAPI.Migrations
                         new
                         {
                             Id = 1,
-                            IsImmutable = true,
                             Name = "Admin",
-                            Power = (byte)255
+                            Power = (byte)0
                         },
                         new
                         {
                             Id = 2,
-                            IsImmutable = true,
                             Name = "Owner",
-                            Power = (byte)200
+                            Power = (byte)0
                         },
                         new
                         {
                             Id = 3,
-                            IsImmutable = true,
                             Name = "Employee",
-                            Power = (byte)5
+                            Power = (byte)0
                         },
                         new
                         {
                             Id = 4,
-                            IsImmutable = true,
                             Name = "User",
-                            Power = (byte)1
+                            Power = (byte)0
                         });
                 });
 
