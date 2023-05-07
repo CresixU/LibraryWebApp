@@ -54,6 +54,8 @@ namespace LibraryAPI
             modelBuilder.Entity<Role>(eb =>
             {
                 eb.Property(ro => ro.Name).HasMaxLength(50).IsRequired();
+                eb.Property(ro => ro.Power).HasDefaultValue(1);
+                eb.Property(ro => ro.IsImmutable).HasDefaultValue(false);
             });
 
             modelBuilder.Entity<User>(eb =>
@@ -78,10 +80,10 @@ namespace LibraryAPI
             //Seeding data
             modelBuilder.Entity<Role>()
                 .HasData(
-                    new Role() { Id = 1, Name = "Admin" },
-                    new Role() { Id = 2, Name = "Owner" },
-                    new Role() { Id = 3, Name = "Employee" },
-                    new Role() { Id = 4, Name = "User" }
+                    new Role() { Id = 1, Name = "Admin", Power = 255, IsImmutable = true },
+                    new Role() { Id = 2, Name = "Owner", Power = 200, IsImmutable = true },
+                    new Role() { Id = 3, Name = "Employee", Power = 5, IsImmutable = true },
+                    new Role() { Id = 4, Name = "User", Power = 1, IsImmutable = true }
                 );
         }
 

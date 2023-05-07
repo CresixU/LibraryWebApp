@@ -46,12 +46,10 @@ namespace LibraryAPI
             CreateMap<Book, BookDTO>()
                 .ForMember(a => a.Category, b => b.MapFrom(c => c.Category.Name));
 
-            //CreateMap<BookCreateDTO, Book>().ForMember(b => b.Category.Id, x => x.MapFrom(dto => dto.CategoryId));
             CreateMap<Book, BookCreateDTO>()
                 .ForMember(dto => dto.CategoryId, x => x.MapFrom(b => b.CategoryId))
                 .ReverseMap();
 
-            //CreateMap<BookUpdateDTO, Book>().ForMember(b => b.Category.Id, x => x.MapFrom(dto => dto.CategoryId));
             CreateMap<Book, BookUpdateDTO>()
                 .ForMember(dto => dto.CategoryId, x => x.MapFrom(b => b.CategoryId))
                 .ReverseMap();
@@ -62,6 +60,9 @@ namespace LibraryAPI
                 .ReverseMap();
 
             CreateMap<Role, RoleDTO>();
+
+            CreateMap<Role, RoleDTO>()
+                .ReverseMap();
 
             CreateMap<Rent, RentDTO>()
                 .ForMember(dto => dto.User, x => x.MapFrom(r => (r.User.Firstname + ' ' + r.User.Lastname)));

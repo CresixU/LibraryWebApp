@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public byte Power { get; set; }
+        public bool IsImmutable { get; set; }
 
         public List<User> Users { get; set; } = new List<User>();
     }
