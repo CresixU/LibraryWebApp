@@ -114,8 +114,8 @@ main .filters {
    position: relative;
    left: 10px;
 }
-.filters input,
-.filters select {
+input,
+select {
    width: 100%;
    border: none;
    border-radius: 25px;
@@ -134,4 +134,27 @@ main .filters {
 .button:disabled > i {
    color: grey !important;
    cursor: default;
+}
+
+.items-container {
+   background-color: white !important;
+   padding: 5px 10px;
+   margin: 10px auto;
+   border-radius: 25px;
+   flex-wrap: wrap;
+}
+.items-container-item {
+   border: 1px solid #712cf9;
+   padding: 3px 10px;
+   width: fit-content;
+   border-radius: 15px;
+   margin: 5px 3px;
+   background-color: white;
+}
+.items-container .btn-close {
+   height: 5px;
+   width: 5px;
+   margin-left: 10px;
+   position: relative;
+   top: -2px;
 }
