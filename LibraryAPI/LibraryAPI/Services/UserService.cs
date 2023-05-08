@@ -67,6 +67,8 @@ namespace LibraryAPI.Services
         public async Task<int> Create(UserCreateDTO dto)
         {
             var user = _mapper.Map<User>(dto);
+            var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "User");
+            user.Role = role;
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
 
