@@ -4,6 +4,10 @@ import AdminBooksView from './views/AdminBooksView.vue'
 import AdminRentsView from './views/AdminRentsView.vue'
 import AdminUsersProfileView from './views/AdminUsersProfileView.vue'
 import AdminPanelView from './views/AdminPanelView.vue'
+import AdminPanelCategoriesView from './views/AdminPanelCategoriesView.vue'
+import AdminPanelBooksView from './views/AdminPanelBooksView.vue'
+import AdminPanelUsersView from './views/AdminPanelUsersView.vue'
+import AdminPanelRolesView from './views/AdminPanelRolesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +43,25 @@ const router = createRouter({
     {
       path: '/panel',
       name: 'panel',
-      component: AdminPanelView
+      component: AdminPanelView,
+      children: [
+        {
+          path: '/panel/categories',
+          component: AdminPanelCategoriesView
+        },
+        {
+          path: 'books',
+          component: AdminPanelBooksView
+        },
+        {
+          path: 'users',
+          component: AdminPanelUsersView
+        },
+        {
+          path: 'roles',
+          component: AdminPanelRolesView
+        }
+      ]
     }
   ]
 })
