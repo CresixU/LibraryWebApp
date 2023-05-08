@@ -28,7 +28,8 @@ namespace LibraryAPI.Services
         {
             var roles = await _dbContext
                 .Roles
-                .OrderByDescending(r => r.Power)
+                .OrderByDescending(r => r.IsImmutable)
+                .ThenByDescending(r => r.Power)
                 .ToListAsync();
 
             var dtos = _mapper.Map<List<RoleDTO>>(roles);
