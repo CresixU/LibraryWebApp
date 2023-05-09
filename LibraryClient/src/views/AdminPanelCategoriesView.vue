@@ -22,7 +22,7 @@
             <label for="category-input2">New Name</label>
             <input type="text" id="category-input2" placeholder="New Category name" style="max-width: 200px" v-model="categoryEditName">
         </div>
-        <button class="btn-main" style="margin-left: 10px; border-radius: 25px; max-height: 36px; margin-top: 24px" v-on:click="CategoryChange(this.selectedCategory)">Save category</button>
+        <button class="btn-main" style=" border-radius: 25px; max-height: 36px; margin-top: 24px" v-on:click="CategoryChange(this.selectedCategory)">Save category</button>
     </div>
 </div>
 </template>
