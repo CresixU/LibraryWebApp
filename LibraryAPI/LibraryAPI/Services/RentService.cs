@@ -88,6 +88,8 @@ namespace LibraryAPI.Services
                 throw new NotFoundException("Book not found");
             books.ForEach(b => b.IsAvailable = false);
 
+            if (dto.RentDate is null) dto.RentDate = DateTime.Now;
+
             var rent = _mapper.Map<Rent>(dto);
             rent.Books = books;
 
