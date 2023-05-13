@@ -15,14 +15,16 @@ Vue3 Router
 AutoMapper<br>
 LINQ<br>
 EntityFramework<br>
-NLOG
+NLOG<br>
+FluentValidation
 
 ## How to start?
 This section will be complited later...
 
 ## To do
 - complite basics functionalities
-- backend authentication JWT *-> how to start section*
+- backend authentication JWT 
+- how to start section
 - Backend tests
 - Frontend tests
 - Docker
