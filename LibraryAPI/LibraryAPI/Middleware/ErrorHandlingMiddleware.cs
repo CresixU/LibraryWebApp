@@ -22,6 +22,11 @@ namespace LibraryAPI.Middleware
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(e.Message);
             }
+            catch (BadRequestException e)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsJsonAsync(e.Message);
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
