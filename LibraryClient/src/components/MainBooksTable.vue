@@ -1,4 +1,13 @@
 <template>
+    <ModalChoiceUserIdInput
+    modalId="modal_rent"
+    title="Rent a book"
+    btnYes="Yes"
+    btnNo="Cancel"
+    :trueData="clickedBook"
+    v-on:CallParentTrueAction="ModalRentAction">
+    Do you want to rent this book? Book id: {{clickedBook}}
+</ModalChoiceUserIdInput>
 <table>
     <thead>
         <tr>
@@ -19,7 +28,7 @@
             <td>{{ book.category }}</td>
             <td>{{ book.publicationYear }}</td>
             <td>{{ book.isAvailable ? 'Tak' : 'Nie' }}</td>
-            <td><button v-on:click="Rent(book.id)" data-content="Rent" :disabled="!book.isAvailable" class="btn-main">Rent</button></td>
+            <td><button v-on:click="ModalRent(book.id)" data-content="Rent" :disabled="!book.isAvailable" class="btn-main">Rent</button></td>
         </tr>
     </tbody>
 </table>
@@ -40,14 +49,20 @@
 </template>
 
 <script>
+import ModalChoiceUserIdInput from './Modals/ModalChoiceUserIdInput.vue'
+
 export default {
+    components: {
+        ModalChoiceUserIdInput
+    },
     data() {
         return {
             books: [],
             data: [],
             page: 1,
             search: "",
-            category: ""
+            category: "",
+            clickedBook: '',
         }
     },
     props: {
@@ -62,13 +77,29 @@ export default {
             var url = `${this.$API_URL}/api/books?PageNumber=${this.page}&PageSize=10`
             if(search != '') url += `&SearchPhrase=${search}`
             if(category != '') url += `&Category=${category}`
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
             this.data = await response.json()
             this.books = this.data.items
         },
-        Rent(bookId) {
-            alert("open modal :)")
+        ModalRent(bookId) {
+            this.clickedBook = bookId
+            var myModal = new bootstrap.Modal(document.getElementById('modal_rent'))
+            myModal.toggle()
         },
+        async ModalRentAction(selectedUser) {
+            const url = `${this.$API_URL}/api/rents`
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({"userId": selectedUser, "BookIds": [this.clickedBook]})
+            })
+            this.fetchData(1)
+        }
     },
     created() {
         this.fetchData(1)
