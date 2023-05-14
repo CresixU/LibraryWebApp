@@ -3,6 +3,8 @@ using LibraryAPI.Entities;
 using LibraryAPI.Exceptions;
 using LibraryAPI.Models.Account;
 using LibraryAPI.Models.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -16,7 +18,7 @@ namespace LibraryAPI.Services
     public interface IAccountService
     {
         Task<int> RegisterUser(RegisterUserDTO dto);
-        string GenerateJwt(LoginUserDTO dto);
+        Task<string> GenerateJwt(LoginUserDTO dto);
     }
 
     public class AccountService : IAccountService
@@ -60,7 +62,7 @@ namespace LibraryAPI.Services
             return user.Id;
         }
 
-        public string GenerateJwt(LoginUserDTO dto)
+        public async Task<string> GenerateJwt(LoginUserDTO dto)
         {
             var user = _context.Users
                 .Include(u => u.Role)
