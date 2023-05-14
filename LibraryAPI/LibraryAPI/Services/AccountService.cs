@@ -64,10 +64,10 @@ namespace LibraryAPI.Services
 
         public async Task<string> GenerateJwt(LoginUserDTO dto)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.Address)
-                .FirstOrDefault(u => u.Email == dto.Email);
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user is null) 
                 throw new BadRequestException("Invalid Username or Password");
