@@ -27,7 +27,7 @@ namespace LibraryAPI.Controllers
         public ActionResult Login([FromBody] LoginUserDTO dto)
         {
             //todo walidacja LoginUserDTO
-            string token = _service.GenerateJwt(dto);
+            string token = _service.GenerateJwt(dto).Result;
             return Ok(token);
         }
 
