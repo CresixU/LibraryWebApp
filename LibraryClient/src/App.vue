@@ -1,34 +1,8 @@
 <template>
 <div>
-  <header class="row">
-    <div class="col-6 logo">
-      <i class="bi bi-book-half" style="margin-right: 12px"></i>
-      <span>Library App</span>
-    </div>
-    <div class="col-6">
-    </div>
-  </header>
+  <HeaderBarComponent></HeaderBarComponent>
   <main>
-    <div class="row nav w-100">
-      <div class="col-3"></div>
-      <div class="col-9 row">
-        <router-link to="/users" class="col nav-element">
-          <MainNavElementItem classProp="bi bi-people">Users</MainNavElementItem>
-        </router-link>
-        <router-link to="/books" class="col nav-element">
-          <MainNavElementItem classProp="bi bi-journal">Books</MainNavElementItem>
-        </router-link>
-        <router-link to="/rents" class="col nav-element">
-          <MainNavElementItem classProp="bi bi-card-list">Rents</MainNavElementItem>
-        </router-link>
-        <router-link to="/panel" class="col nav-element">
-          <MainNavElementItem classProp="bi bi-person-gear">Panel</MainNavElementItem>
-        </router-link>
-      </div>
-    </div>
-    <div class="row px-2 py-4">
-      <router-view></router-view>
-    </div>
+    <RouterView></RouterView>
   </main>
   <footer>
 
@@ -39,14 +13,11 @@
 
 <script>
 
-import MainNavElementItem from './components/MainNavElementItem.vue';
+import HeaderBarComponent from './components/HeaderBarComponent.vue';
 
 export default {
   components: {
-    MainNavElementItem,
+    HeaderBarComponent
   }
 }
 </script>
-
-<style scoped>
-</style>
