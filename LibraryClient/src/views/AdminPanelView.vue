@@ -1,16 +1,16 @@
 <template>
 <div class="row">
     <div class="col-3" style="padding-left: 0">
-        <router-link to="/panel/categories">
+        <router-link to="/admin/categories">
             <AdminPanelNavItem>Categories</AdminPanelNavItem>
         </router-link>
-        <router-link to="/panel/books">
+        <router-link to="/admin/books">
             <AdminPanelNavItem>New book</AdminPanelNavItem>
         </router-link>
-        <router-link to="/panel/users">
+        <router-link to="/admin/users">
             <AdminPanelNavItem>New user</AdminPanelNavItem>
         </router-link>
-        <router-link to="/panel/roles">
+        <router-link to="/admin/roles">
             <AdminPanelNavItem>Roles</AdminPanelNavItem>
         </router-link>
     </div>
