@@ -13,56 +13,63 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/LoginView.vue')
+    },
+    {
+      path: '/panel',
       name: 'main',
       // route level code-splitting
       // this generates a separate chunk (<name>.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('./views/AdminMainView.vue')
-    },
-    {
-      path: '/users',
-      name: 'users',
-      component: AdminUsersView,
-    },
-    {
-      path: '/user/:id',
-      name: 'userProfile',
-      component: AdminUsersProfileView
-    },
-    {
-      path: '/books',
-      name: 'books',
-      component: AdminBooksView
-    },
-    {
-        path: '/rents',
-        name: 'rents',
-        component: AdminRentsView
-    },
-    {
-      path: '/panel',
-      name: 'panel',
-      component: AdminPanelView,
+      component: () => import('./views/AdminMainView.vue'),
       children: [
         {
-          path: '/panel/categories',
-          component: AdminPanelCategoriesView
+          path: 'users',
+          name: 'users',
+          component: AdminUsersView,
+        },
+        {
+          path: 'user/:id',
+          name: 'userProfile',
+          component: AdminUsersProfileView
         },
         {
           path: 'books',
-          component: AdminPanelBooksView
+          name: 'books',
+          component: AdminBooksView
         },
         {
-          path: 'users',
-          component: AdminPanelUsersView
+            path: 'rents',
+            name: 'rents',
+            component: AdminRentsView
         },
         {
-          path: 'roles',
-          component: AdminPanelRolesView
+          path: '/admin',
+          name: 'panel',
+          component: AdminPanelView,
+          children: [
+            {
+              path: '/admin/categories',
+              component: AdminPanelCategoriesView
+            },
+            {
+              path: 'books',
+              component: AdminPanelBooksView
+            },
+            {
+              path: 'users',
+              component: AdminPanelUsersView
+            },
+            {
+              path: 'roles',
+              component: AdminPanelRolesView
+            }
+          ]
         }
       ]
-    }
+    },
   ]
 })
 
