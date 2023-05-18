@@ -20,28 +20,41 @@
 </template>
 <script>
 import router from '../router'
+import { store } from '../store.js'
 
 export default {
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            store
         }
     },
     methods: {
         async LogIn() {
             const url = `${this.$API_URL}/api/account/login`
-            const response = await fetch(url, {
+            try {
+                const response = await fetch(url, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({"email": this.email, "password": this.password})
-            })
-            .then(response => response.text())
-            .then(data => {
-                this.$cookies.set('auth',data)
-                this.$router.replace('/panel')
-            })
+                })
+                .then(response => {
+                    if(!response.ok)
+                        throw new Error("Failed")
+                    return response.text()
+                })
+                .then(data => {
+                    this.store.isUserLogged = true
+                    this.$cookies.set('auth',data)
+                    this.$router.replace('/panel')
+                })
+                
+            }
+            catch(error) {
+                console.error("There has been a problem with your fetch operation:", error);
+            }      
         },
         CheckCookies() {
             if(this.$cookies.isKey('auth')) router.replace('/panel')

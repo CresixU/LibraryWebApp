@@ -5,7 +5,7 @@
         <span>Library App</span>
     </div>
     <div class="col-6">
-        <div v-if="isAuth" class="logout">
+        <div v-if="store.isUserLogged" class="logout">
         <button class="button" @click="LogOut">
             <i class="bi bi-box-arrow-left mx-2"></i>Log Out
         </button>
@@ -15,8 +15,9 @@
 </template>
 <script>
 
-import MainNavElementItem from '../components/MainNavElementItem.vue';
-import router from '../router';
+import MainNavElementItem from '../components/MainNavElementItem.vue'
+import router from '../router'
+import { store } from '../store.js'
 
 export default {
   components: {
@@ -25,37 +26,30 @@ export default {
   data() {
     return {
       isAuth: false,
-      authCookie: this.$cookies.get('auth')
+      store
     }
   },
   methods: {
     CheckCookies() {
-      console.log("Checking cookies")
       if(this.$cookies.get('auth') == null) {
         router.replace('/login')
-        this.isAuth = false;
+        this.store.isUserLogged = false
       }
       else {
         router.replace('/panel')
-        this.isAuth = true;
+        this.store.isUserLogged = true
       }
     },
     LogOut() {
       if(this.$cookies.get('auth') != null) {
         this.$cookies.remove('auth')
         router.replace('/login')
-        this.isAuth = false;
+        this.store.isUserLogged = false
       }
-    }
+    },
   },
   created() {
-    this.CheckCookies(),
-    this.isAuth = this.authCookie !== null
-  },
-  watch: {
-    isAuth() {
-        console.log(`isAuth: ${this.isAuth}`)
-    }
+    this.CheckCookies()
   }
 }
 </script>
