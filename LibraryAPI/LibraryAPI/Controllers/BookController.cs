@@ -2,6 +2,7 @@
 using LibraryAPI.Models;
 using LibraryAPI.Models.Books;
 using LibraryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
@@ -16,6 +17,7 @@ namespace LibraryAPI.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<BookDTO>> GetAll([FromQuery]LibraryQuery query)
         {

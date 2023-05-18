@@ -55,6 +55,7 @@ builder.Services.AddScoped<IRentService, RentService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDTO>, RegisterUserDTOValidator>();
+builder.Services.AddScoped<IValidator<LoginUserDTO>, LoginUserDTOValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
