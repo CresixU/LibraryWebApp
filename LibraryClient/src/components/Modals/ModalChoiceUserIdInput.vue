@@ -76,7 +76,13 @@ export default {
         },
         async fetchData() {
             var url = `${this.$API_URL}/api/users?PageNumber=1&PageSize=10&SearchPhrase=${this.userInput}`
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
+            })
             var data = await response.json()
             this.users = data.items
         },

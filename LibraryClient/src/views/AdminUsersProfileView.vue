@@ -78,11 +78,21 @@ export default {
         async fetchData(page) {
             this.page = page
             const url = `${this.$API_URL}/api/users/${this.$route.params.id}`
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
             this.data = await response.json()
 
             const url2 = `${this.$API_URL}/api/rents/${this.$route.params.id}?PageNumber=${this.page}&PageSize=10`
-            const response2 = await fetch(url2)
+            const response2 = await fetch(url2, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
             this.rents = await response2.json()
         },
         ConvertDateTime(datetime) {

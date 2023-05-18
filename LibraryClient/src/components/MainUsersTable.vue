@@ -57,7 +57,12 @@ export default {
             if(search != '') { 
                 url += `&SearchPhrase=${search}`
             }
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
             this.data = await response.json()
             this.users = this.data.items
         },

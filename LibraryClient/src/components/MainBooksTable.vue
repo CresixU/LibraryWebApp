@@ -95,7 +95,11 @@ export default {
             const url = `${this.$API_URL}/api/rents`
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: {
+                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
                 body: JSON.stringify({"userId": selectedUser, "BookIds": [this.clickedBook]})
             })
             this.fetchData(1)

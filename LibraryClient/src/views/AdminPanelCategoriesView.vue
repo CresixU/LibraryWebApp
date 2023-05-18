@@ -46,7 +46,11 @@ export default {
             const url = `${this.$API_URL}/api/categories`
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: {
+                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
                 body: JSON.stringify({"name": this.categoryInput})
             })
             this.fetchData()
@@ -57,7 +61,12 @@ export default {
             if(index == -1) return
             const url = `${this.$API_URL}/api/categories/${id}`
             const response = await fetch(url, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
             })
             this.categories.splice(index, 1)
             this.fetchData()
@@ -66,8 +75,12 @@ export default {
             if(id == '') return
             const url = `${this.$API_URL}/api/categories/${id}`
             const response = await fetch(url, {
+                credentials: 'include',
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
                 body: JSON.stringify({"name": this.categoryEditName})
             })
             this.fetchData()

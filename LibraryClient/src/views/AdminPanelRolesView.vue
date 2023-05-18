@@ -53,7 +53,12 @@ export default {
     methods: {
         async fetchData() {
             const url = `${this.$API_URL}/api/roles`
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
             this.roles = await response.json()
         },
         async RoleDelete(id) {

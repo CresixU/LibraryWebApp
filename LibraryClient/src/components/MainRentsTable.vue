@@ -95,7 +95,12 @@ export default {
             this.search = search
             var url = `${this.$API_URL}/api/rents?PageNumber=${this.page}&PageSize=10`
             if(search != '') url += `&SearchPhrase=${search}`
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
             this.data = await response.json()
             this.rents = this.data.items
         },
@@ -111,13 +116,16 @@ export default {
         },
         async ModalRentReturnAction(id) {
             console.log("Returning rent id: "+id)
+            var now = Date.now()
+            var date = new Date(now).toJSON()
             const url = `${this.$API_URL}/api/rents/${id}`
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({id})
+                body: JSON.stringify({"returnDate": date})
             })
             console.log(response)
+            this.fetchData(1)
         },
         ModalDelete(id) {
             this.clickedRent = id

@@ -53,7 +53,11 @@ export default {
             const url = `${this.$API_URL}/api/books`
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: {
+                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
                 body: JSON.stringify({"Title": this.title, "Author": this.author, "PublicationYear": this.year, "CategoryId": this.category})
             })
             this.title = ''
