@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
+    [ApiController]
     [Route("api/account")]
     public class AccountController : ControllerBase
     {
@@ -26,7 +27,6 @@ namespace LibraryAPI.Controllers
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginUserDTO dto)
         {
-            //todo walidacja LoginUserDTO
             string token = _service.GenerateJwt(dto).Result;
             return Ok(token);
         }

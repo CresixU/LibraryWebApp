@@ -2,10 +2,13 @@
 using LibraryAPI.Models;
 using LibraryAPI.Models.Rents;
 using LibraryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
+    [ApiController]
+    [Authorize]
     [Route("api/rents")]
     public class RentController : ControllerBase
     {

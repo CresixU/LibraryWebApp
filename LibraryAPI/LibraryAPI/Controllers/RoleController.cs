@@ -1,10 +1,13 @@
 ﻿using LibraryAPI.Entities;
 using LibraryAPI.Models.Roles;
 using LibraryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
+    [Authorize]
+    [ApiController]
     [Route("api/roles")]
     public class RoleController : ControllerBase
     {

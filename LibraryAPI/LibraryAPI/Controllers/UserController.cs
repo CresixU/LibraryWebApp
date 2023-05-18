@@ -3,10 +3,12 @@ using LibraryAPI.Entities;
 using LibraryAPI.Models;
 using LibraryAPI.Models.Users;
 using LibraryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/users")]
     public class UserController : ControllerBase

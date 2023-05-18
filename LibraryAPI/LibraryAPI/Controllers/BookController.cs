@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
+    [ApiController]
+    [Authorize]
     [Route("api/books")]
     public class BookController : ControllerBase
     {
@@ -17,7 +19,7 @@ namespace LibraryAPI.Controllers
             _service = service;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<BookDTO>> GetAll([FromQuery]LibraryQuery query)
         {

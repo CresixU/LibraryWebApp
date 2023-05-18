@@ -1,9 +1,12 @@
 ﻿using LibraryAPI.Models.Categories;
 using LibraryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
+    [ApiController]
+    [Authorize]
     [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
@@ -14,6 +17,7 @@ namespace LibraryAPI.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<CategoryDTO>> GetAll()
         {
@@ -21,6 +25,7 @@ namespace LibraryAPI.Controllers
 
             return Ok(categories);
         }
+
 
         [HttpPost]
         public ActionResult Create([FromBody] CategoryDTO dto)
