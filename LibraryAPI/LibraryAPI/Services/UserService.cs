@@ -13,6 +13,7 @@ namespace LibraryAPI.Services
         Task<int> Create(UserCreateDTO dto);
         Task<bool> Update(int id, UserUpdateDTO dto);
         Task<bool> Delete(int id);
+        Task<bool> RoleUpdate(int userId, int roleId);
 
     }
 
@@ -107,6 +108,26 @@ namespace LibraryAPI.Services
             if (user == null) return false;
 
             _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RoleUpdate(int userId, int roleId)
+        {
+            var user = await _dbContext
+                .Users
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user is null) return false;
+
+            var role = await _dbContext
+                .Roles
+                .FirstOrDefaultAsync(r => r.Id == roleId);
+
+            if (role == null) return false;
+
+            user.Role = role;
             await _dbContext.SaveChangesAsync();
 
             return true;

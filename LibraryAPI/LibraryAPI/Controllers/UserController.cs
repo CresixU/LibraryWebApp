@@ -65,5 +65,15 @@ namespace LibraryAPI.Controllers
 
             return NotFound();
         }
+
+        [HttpPut("{id}/role/{roleId}")]
+        public ActionResult UserUpdateRole([FromRoute] int id, [FromRoute] int roleId)
+        {
+            var isUpdated = _userService.RoleUpdate(id, roleId).Result;
+
+            if (isUpdated) return Ok();
+
+            return NotFound();
+        }
     }
 }
