@@ -1,6 +1,6 @@
 <template>
 <div class="modal fade" :id="modalId" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{ title }}</h5>
@@ -31,7 +31,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p>Selected user id: {{ selectedUser }}</p>
+                    <p v-if="selectedUser">Selected user id: {{ selectedUser }}</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -96,3 +96,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+input {
+    margin: 10px auto;
+    border-bottom: 2px solid rgb(132, 0, 255);
+}
+</style>
