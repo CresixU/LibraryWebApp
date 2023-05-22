@@ -8,6 +8,7 @@
         </div>
     </div>
     <span style="position: relative; top: -15px; left: 10px; opacity: 0.6; font-size: 75%">You can't delete any role if there are users in it</span>
+    <h4 class="mt-5">Add new role</h4>
     <div class="d-flex">
         <div>
             <label for="role-input">Name</label>
@@ -26,11 +27,11 @@
             <option value="" selected disabled>Select role</option>
             <option :value="role.id" v-for="role in roles" :key="role.id" :disabled="role.isImmutable">{{ role.name }}</option>
         </select>
-        <div>
+        <div class="my-2">
             <label for="role-input2">Name</label>
             <input type="text" id="role-input2" placeholder="Add new role" style="max-width: 200px" v-model="roleEditName">
         </div>
-        <div>
+        <div class="my-2">
             <label for="role-power2">Power</label>
             <input type="number" id="role-power2" placeholder="Role power" style="max-width: 100px" v-model="roleEditPower">
         </div>
@@ -66,6 +67,11 @@ export default {
             if(index == -1) return
             const url = `${this.$API_URL}/api/roles/${id}`
             const response = await fetch(url, {
+                credentials: 'include',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
                 method: 'DELETE'
             })
             this.roles.splice(index, 1)
@@ -76,7 +82,11 @@ export default {
             const url = `${this.$API_URL}/api/roles/`
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                 },
                 body: JSON.stringify({"name": this.roleInput, "power": this.rolePower})
             })
             this.fetchData()
@@ -87,7 +97,11 @@ export default {
             const url = `${this.$API_URL}/api/roles/${id}`
             const response = await fetch(url, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                 },
                 body: JSON.stringify({"name": this.roleEditName, "power": this.roleEditPower})
             })
             this.fetchData()

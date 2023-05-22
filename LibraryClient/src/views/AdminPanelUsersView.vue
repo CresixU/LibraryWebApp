@@ -56,8 +56,12 @@ export default {
         async CreateUser() {
             const url = `${this.$API_URL}/api/users`
             const response = await fetch(url, {
+                credentials: 'include',
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
                 body: JSON.stringify(
                 {
                     "Firstname": this.firstname,
@@ -70,8 +74,7 @@ export default {
                     "PostalCode": this.postalcode
                 })
             })
-            console.log("ok")
-            /*.then(res => {
+            .then(res => {
                 this.firstname = '',
                 this.lastname = '',
                 this.email = '',
@@ -80,7 +83,7 @@ export default {
                 this.street = '',
                 this.number = '',
                 this.postalcode = ''
-            })*/
+            })
             
         }
     }
