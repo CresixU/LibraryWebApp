@@ -23,6 +23,21 @@
                 <td>Postal code</td>
                 <td>{{ data.postalCode }}</td>
             </tr>
+            <tr>
+                <td>Role</td>
+                <td>
+                    <select v-model="selectedRoleId">
+                        <option
+                            :value="role.id"
+                            v-for="role in roles" :v-key="role.id"
+                            :selected="role.name == data.role"
+                            :class="{ active: role.name == data.role }">
+                            {{ role.name }}
+                        </option>
+                    </select>
+                    <button class="btn-main" @click="ChangeUserRole">Save</button>
+                </td>
+            </tr>
         </table>
     </div>
     <div class="mt-5">
@@ -71,6 +86,8 @@ export default {
         return {
             data: [],
             rents: [],
+            roles: [],
+            selectedRoleId: null,
             page: 1
         }
     },
@@ -85,7 +102,8 @@ export default {
                 }
             })
             this.data = await response.json()
-
+        },
+        async fetchRents() {
             const url2 = `${this.$API_URL}/api/rents/${this.$route.params.id}?PageNumber=${this.page}&PageSize=10`
             const response2 = await fetch(url2, {
                 credentials: 'include',
@@ -95,19 +113,54 @@ export default {
             })
             this.rents = await response2.json()
         },
+        async fetchRoles() {
+            const url3 = `${this.$API_URL}/api/roles`
+            const response3 = await fetch(url3, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
+            this.roles = await response3.json()
+            this.selectedRoleId = this.roles.find(r => r.name == this.data.role).id
+        },
         ConvertDateTime(datetime) {
             if(datetime == null) return ''
             var result = datetime.substr(0,10) + ' ' + datetime.substr(11,5)
             return result
+        },
+        async ChangeUserRole() {
+            const url = `${this.$API_URL}/api/users/${this.$route.params.id}/role/${this.selectedRoleId}`
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                },
+                method: 'PUT'
+            })
+            .then(response => {
+                this.fetchRoles()
+            })
         }
+
     },
     created() {
         this.fetchData(1)
+        this.fetchRoles()
+        this.fetchRents()
     }
 }
 </script>
 <style scoped>
 .profile table td, .profile table tr {
     background-color: transparent;
+}
+select {
+    max-width: 150px;
+    margin-right: 5px;
+    margin-left: -5px;
+}
+.active {
+    background-color: rgb(244, 206, 255);
 }
 </style>
