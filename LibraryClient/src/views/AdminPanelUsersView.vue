@@ -45,7 +45,7 @@ export default {
             firstname: '',
             lastname: '',
             email: '',
-            password: '',
+            password: '123456',
             city: '',
             street: '',
             number: '',
@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         async CreateUser() {
-            const url = `${this.$API_URL}/api/users`
+            const url = `${this.$API_URL}/api/account/register`
             const response = await fetch(url, {
                 credentials: 'include',
                 method: 'POST',
@@ -68,6 +68,7 @@ export default {
                     "Lastname": this.lastname,
                     "Email": this.email,
                     "Password": this.password,
+                    "ConfirmPassword": this.password,
                     "City": this.city,
                     "Street": this.street,
                     "Number": this.number,
@@ -83,6 +84,7 @@ export default {
                 this.street = '',
                 this.number = '',
                 this.postalcode = ''
+                alert("User created");
             })
             
         }

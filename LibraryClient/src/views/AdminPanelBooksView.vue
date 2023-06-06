@@ -50,16 +50,19 @@ export default {
         },
         async CreateBook() {
             if(this.title == '' || this.author == '' || this.year == '' || this.category == '') return
-            const url = `${this.$API_URL}/api/books`
+            const url = `${this.$API_URL}/api/books/`
             const response = await fetch(url, {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                     'Content-Type': 'application/json',
+                headers: { 
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.$cookies.get('auth')}`
-                },
-                body: JSON.stringify({"Title": this.title, "Author": this.author, "PublicationYear": this.year, "CategoryId": this.category})
+                 },
+                body: JSON.stringify({"title": this.title, "author": this.author, "publicationYear": this.year, "categoryId": this.category})
             })
+            if (!response.ok) {
+                throw new Error("Network response was not OK")
+            }
             this.title = ''
             this.author = ''
             this.year = ''

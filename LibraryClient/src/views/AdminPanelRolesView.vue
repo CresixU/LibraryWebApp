@@ -75,7 +75,7 @@ export default {
                 method: 'DELETE'
             })
             this.roles.splice(index, 1)
-            this.fetchData()
+            await this.fetchData()
         },
         async RoleAdd() {
             if(this.roleInput == '' || this.rolePower == '') return
