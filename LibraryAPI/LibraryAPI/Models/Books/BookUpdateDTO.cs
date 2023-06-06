@@ -11,7 +11,7 @@ namespace LibraryAPI.Models.Books
         [Required]
         [MaxLength(50)]
         public string Author { get; set; }
-        [MaxLength(4)]
+        [Range(0, 9999)]
         public int PublicationYear { get; set; }
         public int CategoryId { get; set; }
     }
