@@ -117,23 +117,36 @@ export default {
         async ModalRentReturnAction(id) {
             console.log("Returning rent id: "+id)
             var now = Date.now()
-            var date = new Date(now).toJSON()
+            var newDate = new Date(now + 2 * 60 * 60 * 1000);
+            var date = new Date(newDate).toJSON()
             const url = `${this.$API_URL}/api/rents/${id}`
             const response = await fetch(url, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                 },
                 body: JSON.stringify({"returnDate": date})
             })
             console.log(response)
-            this.fetchData(1)
+            await this.fetchData(1)
         },
         ModalDelete(id) {
             this.clickedRent = id
             var myModal = new bootstrap.Modal(document.getElementById('modal_delete'))
             myModal.toggle()
         },
-        ModalDeleteAction(id) {
+        async ModalDeleteAction(id) {
             console.log("Deleting id: "+id)
+            const url = `${this.$API_URL}/api/rents/${id}`
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
+            await this.fetchData(1)
         }
     },
     created() {
