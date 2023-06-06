@@ -28,6 +28,7 @@ namespace LibraryAPI.Services
         {
             var roles = await _dbContext
                 .Roles
+                .Where(r => r.isDeleted == false)
                 .OrderByDescending(r => r.IsImmutable)
                 .ThenByDescending(r => r.Power)
                 .ToListAsync();
@@ -39,7 +40,7 @@ namespace LibraryAPI.Services
 
         public async Task<int> Create(RoleDTO dto)
         {
-            if (dto.Power >= byte.MinValue || dto.Power < byte.MaxValue) return 0;
+            if (dto.Power <= byte.MinValue || dto.Power > byte.MaxValue) return 0;
             var role = _mapper.Map<Role>(dto);
 
             _dbContext.Roles.Add(role);
@@ -50,7 +51,7 @@ namespace LibraryAPI.Services
 
         public async Task<bool> Update(int id, RoleDTO dto)
         {
-            if (dto.Power >= byte.MinValue || dto.Power < byte.MaxValue) return false;
+            if (dto.Power <= byte.MinValue || dto.Power > byte.MaxValue) return false;
             var role = await _dbContext
                 .Roles
                 .FirstOrDefaultAsync(r => r.Id == id);
@@ -72,7 +73,8 @@ namespace LibraryAPI.Services
             if (role is null) return false;
             if (role.IsImmutable) return false;
 
-            _dbContext.Roles.Remove(role);
+            // _dbContext.Roles.Remove(role);
+            role.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;
         }

@@ -28,6 +28,7 @@ namespace LibraryAPI.Services
         {
             var categories = await _dbContext
                 .Categories
+                .Where(c => c.isDeleted == false)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
 
@@ -68,7 +69,8 @@ namespace LibraryAPI.Services
             if(category is null) return false;
             if(category.Books.Any()) return false;
 
-            _dbContext.Categories.Remove(category);
+            //_dbContext.Categories.Remove(category);
+            category.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;
         }

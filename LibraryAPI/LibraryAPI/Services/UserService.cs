@@ -33,8 +33,9 @@ namespace LibraryAPI.Services
             var baseQuery = await _dbContext
                 .Users
                 .Include(u => u.Address)
-                .Where(u => query.SearchPhrase == null || ((u.Firstname + ' ' + u.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
-                                                                || u.Email.ToLower().Contains(query.SearchPhrase.ToLower())))
+                .Where(u => u.isDeleted == false &&
+                                    (query.SearchPhrase == null || ((u.Firstname + ' ' + u.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
+                                                                || u.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
                 .ToListAsync();
 
             var users = baseQuery
@@ -107,7 +108,8 @@ namespace LibraryAPI.Services
 
             if (user == null) return false;
 
-            _dbContext.Users.Remove(user);
+            //_dbContext.Users.Remove(user);
+            user.isDeleted = true;
             await _dbContext.SaveChangesAsync();
 
             return true;

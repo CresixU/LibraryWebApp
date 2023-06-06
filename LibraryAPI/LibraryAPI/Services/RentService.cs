@@ -34,8 +34,9 @@ namespace LibraryAPI.Services
                         .Rents
                         .Include(r => r.User)
                         .Include(r => r.Books)
-                        .Where(r => query.SearchPhrase == null || ((r.User.Firstname + ' ' + r.User.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
-                                                                || r.User.Email.ToLower().Contains(query.SearchPhrase.ToLower())))
+                        .Where(r => r.isDeleted == false && 
+                                    (query.SearchPhrase == null || ((r.User.Firstname + ' ' + r.User.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
+                                                                || r.User.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
                         .ToListAsync();
 
             var rents = baseQuery
@@ -56,6 +57,7 @@ namespace LibraryAPI.Services
         {
             var user = await _dbContext
                         .Users
+                        .Where(r => r.isDeleted == false)
                         .Include(u => u.Rents)
                         .ThenInclude(r => r.Books)
                         .ThenInclude(b => b.Category)
@@ -125,7 +127,8 @@ namespace LibraryAPI.Services
             if (rent is null) return false;
             if (rent.ReturnDate is null) return false;
 
-            _dbContext.Rents.Remove(rent);
+            //_dbContext.Rents.Remove(rent);
+            rent.isDeleted = true;
             await _dbContext.SaveChangesAsync();
 
             return true;

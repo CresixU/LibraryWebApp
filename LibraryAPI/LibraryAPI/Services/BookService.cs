@@ -31,8 +31,9 @@ namespace LibraryAPI.Services
             var baseQuery = await _dbContext
                 .Books
                 .Include(b => b.Category)
-                .Where(b => query.SearchPhrase == null || (b.Title.ToLower().Contains(query.SearchPhrase.ToLower())
-                                                        || b.Author.ToLower().Contains(query.SearchPhrase.ToLower())))
+                .Where(b => b.isDeleted == false
+                          && (query.SearchPhrase == null || (b.Title.ToLower().Contains(query.SearchPhrase.ToLower())
+                                                        || b.Author.ToLower().Contains(query.SearchPhrase.ToLower()))))
                 .ToListAsync();
 
             var books = baseQuery
@@ -53,6 +54,7 @@ namespace LibraryAPI.Services
         {
             var book = await _dbContext
                 .Books
+                .Where(b => b.isDeleted == false)
                 .Include(b => b.Category)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
@@ -96,7 +98,8 @@ namespace LibraryAPI.Services
 
             if (book is null) return false;
 
-            _dbContext.Books.Remove(book);
+            //_dbContext.Books.Remove(book);
+            book.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;
         }
