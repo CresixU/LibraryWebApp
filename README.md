@@ -19,12 +19,15 @@ NLOG<br>
 FluentValidation
 
 ## How to start?
-This section will be complited later...
+ Requirements:
+  - Microsoft SDK 6.0 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+  - Nodejs + npm https://nodejs.org/en/download
+
+	To run BackendAPI go to /LibraryAPI/LibraryAPI and run command 'dotnet run' 
+	To run FrontendClient go to /LibraryClient and run command 'npm run dev'
+  website: http://localhost:5173
 
 ## To do
-- complite basics functionalities
-- backend authentication JWT 
-- how to start section
 - Backend tests
 - Frontend tests
 - Docker
