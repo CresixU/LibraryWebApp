@@ -45,15 +45,51 @@ namespace LibraryAPI
                 new User()
                 {
                     Firstname = "Admin",
-                    Lastname = "Admin",
-                    Email = "cresixu@gmail.com",
-                    Password = "password",
+                    Lastname = "Library",
+                    Email = "admin@mail.com",
+                    Password = "AQAAAAEAACcQAAAAEH4IFyCqZ7OAcnidPUEqi4tGdr0l1Y685DHfAbxV6oHEQPFS0n+Xk3t1Uzpi+IrPKw==", //password
                     Address = new Address()
                     {
                         City = "Example", Street = "Example", Number = "Example", PostalCode = "Example"
                     },
                     RoleId = 1
-                }
+                },
+                new User()
+                {
+                    Firstname = "Owner",
+                    Lastname = "Library",
+                    Email = "owner@mail.com",
+                    Password = "AQAAAAEAACcQAAAAEH4IFyCqZ7OAcnidPUEqi4tGdr0l1Y685DHfAbxV6oHEQPFS0n+Xk3t1Uzpi+IrPKw==",
+                    Address = new Address()
+                    {
+                        City = "Example", Street = "Example", Number = "Example", PostalCode = "Example"
+                    },
+                    RoleId = 2
+                },
+                new User()
+                {
+                    Firstname = "Employee",
+                    Lastname = "Library",
+                    Email = "employee@mail.com",
+                    Password = "AQAAAAEAACcQAAAAEH4IFyCqZ7OAcnidPUEqi4tGdr0l1Y685DHfAbxV6oHEQPFS0n+Xk3t1Uzpi+IrPKw==",
+                    Address = new Address()
+                    {
+                        City = "Example", Street = "Example", Number = "Example", PostalCode = "Example"
+                    },
+                    RoleId = 3
+                },
+                new User()
+                {
+                    Firstname = "User",
+                    Lastname = "Library",
+                    Email = "user@mail.com",
+                    Password = "AQAAAAEAACcQAAAAEH4IFyCqZ7OAcnidPUEqi4tGdr0l1Y685DHfAbxV6oHEQPFS0n+Xk3t1Uzpi+IrPKw==",
+                    Address = new Address()
+                    {
+                        City = "Example", Street = "Example", Number = "Example", PostalCode = "Example"
+                    },
+                    RoleId = 4
+                },
             };
             return users;
         }
