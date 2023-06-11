@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AdminWelcomeView from './views/AdminWelcomeView.vue'
 import AdminUsersView from './views/AdminUsersView.vue'
 import AdminBooksView from './views/AdminBooksView.vue'
 import AdminRentsView from './views/AdminRentsView.vue'
@@ -20,11 +21,14 @@ const router = createRouter({
     {
       path: '/panel',
       name: 'main',
-      // route level code-splitting
-      // this generates a separate chunk (<name>.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('./views/AdminMainView.vue'),
       children: [
+        {
+          path: '',
+          name: 'welcome',
+          component: AdminWelcomeView
+        
+        },
         {
           path: 'users',
           name: 'users',
