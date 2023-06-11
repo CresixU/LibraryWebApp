@@ -21,6 +21,7 @@ namespace LibraryAPI.Controllers
         public ActionResult RegisterUser([FromBody] RegisterUserDTO dto)
         {
             var id = _service.RegisterUser(dto).Result;
+            if (id == -1) return Conflict("Email taken"); 
             return Created($"api/account/{id}",null);
         }
 
@@ -29,6 +30,14 @@ namespace LibraryAPI.Controllers
         {
             string token = _service.GenerateJwt(dto).Result;
             return Ok(token);
+        }
+
+        [HttpGet("checkmail")]
+        public ActionResult IsEmailAvailable([FromQuery] string email)
+        {
+
+            if(_service.IsEmailAvailable(email).Result) return Ok(true);
+            else return Conflict("Email taken");
         }
 
 

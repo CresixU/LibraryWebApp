@@ -12,6 +12,7 @@
     <div class="mb-2">
         <label for="user-email">Email</label>
         <input type="text" name="user-email" id="user-email" v-model="email">
+        <p style="color: red; margin-top: -3px;" id="mail-checker"></p>
     </div>
     <div class="mb-2">
         <label for="user-password">Password</label>
@@ -54,6 +55,10 @@ export default {
     },
     methods: {
         async CreateUser() {
+            if(!this.CheckMail()) {
+                alert("Mail is taken")
+                return false
+            }
             const url = `${this.$API_URL}/api/account/register`
             const response = await fetch(url, {
                 credentials: 'include',
@@ -76,6 +81,10 @@ export default {
                 })
             })
             .then(res => {
+                if(!res.ok) {
+                    alert("One or more fields were wrong")
+                    return
+                }
                 this.firstname = '',
                 this.lastname = '',
                 this.email = '',
@@ -87,6 +96,32 @@ export default {
                 alert("User created");
             })
             
+        },
+        async CheckMail() {
+        const url = `${this.$API_URL}/api/account/checkmail?email=${this.email}`
+            const response = await fetch(url, {
+                credentials: 'include',
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                }
+            })
+            .then(res => {
+                if(!res.ok) {
+                    document.getElementById('mail-checker').innerHTML = 'Mail is taken'
+                    return false
+                }
+                else document.getElementById('mail-checker').innerHTML = ''
+                return true
+                
+            })
+        
+        },
+    },
+    watch: {
+        email() {
+            this.CheckMail()
         }
     }
 }

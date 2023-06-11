@@ -19,6 +19,7 @@ namespace LibraryAPI.Services
     {
         Task<int> RegisterUser(RegisterUserDTO dto);
         Task<string> GenerateJwt(LoginUserDTO dto);
+        Task<bool> IsEmailAvailable(string email);
     }
 
     public class AccountService : IAccountService
@@ -36,6 +37,8 @@ namespace LibraryAPI.Services
 
         public async Task<int> RegisterUser(RegisterUserDTO dto)
         {
+            if (IsEmailAvailable(dto.Email).Result) return -1;
+
             var user = new User()
             {
                 Firstname = dto.Firstname,
@@ -83,7 +86,8 @@ namespace LibraryAPI.Services
                 new Claim(ClaimTypes.Name, $"{user.Firstname} {user.Lastname}"),
                 new Claim(ClaimTypes.Email,$"{user.Email}"),
                 new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
-                new Claim("City", user.Address.City)
+                new Claim("City", user.Address.City),
+                new Claim("RoleName", user.Role.Name)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
@@ -102,6 +106,16 @@ namespace LibraryAPI.Services
             var tokenHandler = new JwtSecurityTokenHandler();
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<bool> IsEmailAvailable(string email)
+        {
+            var user = await _context
+                        .Users
+                        .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user is null) return true;
+            return false;
         }
     }
 }
