@@ -42,7 +42,9 @@ export default {
                 })
                 .then(response => {
                     if(!response.ok)
-                        throw new Error("Failed")
+                    {
+                        throw new Error("Incorrect data")
+                    }
                     return response.text()
                 })
                 .then(data => {
@@ -54,6 +56,7 @@ export default {
                 
             }
             catch(error) {
+                alert(error)
                 console.error("There has been a problem with your fetch operation:", error);
             }      
         },

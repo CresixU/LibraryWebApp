@@ -30,7 +30,7 @@
                         <option
                             :value="role.id"
                             v-for="role in roles" :v-key="role.id"
-                            :selected="role.name == data.role"
+                            :selected="(role.name == data.role)"
                             :class="{ active: role.name == data.role }">
                             {{ role.name }}
                         </option>
@@ -125,7 +125,7 @@ export default {
                 }
             })
             this.roles = await response3.json()
-            this.selectedRoleId = this.roles.find(r => r.name == this.data.role).id
+            this.selectedRoleId = this.roles.find(r => r.name == this.data.role).Id
         },
         ConvertDateTime(datetime) {
             if(datetime == null) return ''
