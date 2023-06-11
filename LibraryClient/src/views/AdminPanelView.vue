@@ -1,7 +1,7 @@
 <template>
 <div class="row">
     <div class="col-3" style="padding-left: 0">
-        <router-link to="/admin/categories">
+        <router-link to="/admin/categories" v-if="store.IsOwner()">
             <AdminPanelNavItem>Categories</AdminPanelNavItem>
         </router-link>
         <router-link to="/admin/books">
@@ -10,7 +10,7 @@
         <router-link to="/admin/users">
             <AdminPanelNavItem>New user</AdminPanelNavItem>
         </router-link>
-        <router-link to="/admin/roles">
+        <router-link to="/admin/roles" v-if="store.IsAdmin()">
             <AdminPanelNavItem>Roles</AdminPanelNavItem>
         </router-link>
     </div>
@@ -22,10 +22,16 @@
 </template>
 <script>
     import AdminPanelNavItem from '../components/AdminPanelNavItem.vue'
+    import { store } from '../store.js'
 
 export default {
     components: {
         AdminPanelNavItem
+    },
+    data() {
+        return {
+            store
+        }
     }
 }
 </script>

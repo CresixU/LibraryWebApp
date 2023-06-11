@@ -23,7 +23,7 @@
                 <td>Postal code</td>
                 <td>{{ data.postalCode }}</td>
             </tr>
-            <tr>
+            <tr v-if="store.IsOwner()">
                 <td>Role</td>
                 <td>
                     <select v-model="selectedRoleId">
@@ -81,6 +81,8 @@
 </div>
 </template>
 <script>
+import { store } from '../store.js'
+
 export default {
     data() {
         return {
@@ -88,7 +90,8 @@ export default {
             rents: [],
             roles: [],
             selectedRoleId: null,
-            page: 1
+            page: 1,
+            store
         }
     },
     methods: {

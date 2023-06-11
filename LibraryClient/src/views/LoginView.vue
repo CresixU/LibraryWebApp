@@ -46,6 +46,7 @@ export default {
                     return response.text()
                 })
                 .then(data => {
+                    this.store.user = JSON.parse(atob(data.split('.')[1]))
                     this.store.isUserLogged = true
                     this.$cookies.set('auth',data)
                     this.$router.replace('/panel')

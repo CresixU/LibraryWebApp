@@ -32,19 +32,21 @@ export default {
   methods: {
     CheckCookies() {
       if(this.$cookies.get('auth') == null) {
-        router.replace('/login')
         this.store.isUserLogged = false
+        router.replace('/login')
       }
       else {
-        router.replace('/panel')
         this.store.isUserLogged = true
+        if(this.store.user == null) this.store.user = JSON.parse(atob(this.$cookies.get('auth').split('.')[1]))
+        router.replace('/panel')
       }
     },
     LogOut() {
       if(this.$cookies.get('auth') != null) {
         this.$cookies.remove('auth')
-        router.replace('/login')
         this.store.isUserLogged = false
+        this.store.user = null
+        router.replace('/login')
       }
     },
   },
