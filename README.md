@@ -26,7 +26,7 @@ FluentValidation
 	To run BackendAPI go to /LibraryAPI/LibraryAPI and run command:<br>
 	  - 'dotnet restore'
 	  - 'dotnet run'
-	To run FrontendClient go to /LibraryClient and run command <br>
+    <br>To run FrontendClient go to /LibraryClient and run command <br>
 	  - 'npm install'
 	  - 'npm run dev'
   	website: http://localhost:5173 <br>
