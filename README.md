@@ -29,7 +29,7 @@ FluentValidation
 	  - 'dotnet ef database update'
 	  - 'dotnet run'
 	<br><br>
-	To run FrontendClient go to /LibraryClient and run command <br>
+To run FrontendClient go to /LibraryClient and run command <br>
 	  - 'npm install'
 	  - 'npm run dev'
   	website: http://localhost:5173 <br>
