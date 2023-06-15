@@ -26,6 +26,7 @@ FluentValidation
 	First: Create database named 'Library'<br>
 	To run BackendAPI go to /LibraryAPI/LibraryAPI and run command:<br>
 	  - 'dotnet restore'
+	  - 'dotnet tool install --global dotnet-ef' (if you dont have it)
 	  - 'dotnet ef database update'
 	  - 'dotnet run'
 	<br><br>
