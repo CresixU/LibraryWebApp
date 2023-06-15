@@ -20,7 +20,7 @@ FluentValidation
 
 ## How to start?
  Requirements:
-  - Microsoft SDK 6.0 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+  - Microsoft .NET SDK 6.0 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
   - Nodejs + npm https://nodejs.org/en/download
 	<br>
 	First: Create database named 'Library'<br>
