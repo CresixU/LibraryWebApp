@@ -22,11 +22,13 @@ FluentValidation
  Requirements:
   - Microsoft SDK 6.0 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
   - Nodejs + npm https://nodejs.org/en/download
-
+	First: Create database named 'Library'<br>
 	To run BackendAPI go to /LibraryAPI/LibraryAPI and run command:<br>
 	  - 'dotnet restore'
+	  - 'dotnet ef database update'
 	  - 'dotnet run'
-    <br>To run FrontendClient go to /LibraryClient and run command <br>
+	<br><br>
+	To run FrontendClient go to /LibraryClient and run command <br>
 	  - 'npm install'
 	  - 'npm run dev'
   	website: http://localhost:5173 <br>
