@@ -82,7 +82,7 @@ var app = builder.Build();
 app.UseCors("FrontEndClient");
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<LibrarySeeder>();
-//seeder.Seed();
+seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
