@@ -30,7 +30,7 @@
                         <option
                             :value="role.id"
                             v-for="role in roles" :v-key="role.id"
-                            :selected="(role.name == data.role)"
+                            :selected="SetSelectedIfRole(role.name)"
                             :class="{ active: role.name == data.role }">
                             {{ role.name }}
                         </option>
@@ -55,11 +55,16 @@
                 <tr v-for="rent in rents.items" :key="rent.id">
                     <td :class="(rent.returnDate != null) ? 'statusgreen' : 'statusred'">{{ rent.id }}</td>
                     <td>
-                        <span v-for="(book, index) in rent.books" :key="book.title"><span v-if="index>1">,</span> {{ book.title }} </span>
+                        <span v-for="(book, index) in rent.books" :key="book.title"><span v-if="index > 1">,</span> {{ book.title }} </span>
                     </td>
                     <td>{{ ConvertDateTime(rent.rentDate) }}</td>
                     <td>{{ ConvertDateTime(rent.returnDate) }}</td>
-                    <td><button class="btn-main" :disabled="rent.returnDate != null">Return</button></td>
+                    <td>
+                        <button 
+                            class="btn-main" 
+                            :disabled="rent.returnDate != null"
+                            @click="ReturnBook(rent.id)">Return</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -107,8 +112,8 @@ export default {
             this.data = await response.json()
         },
         async fetchRents() {
-            const url2 = `${this.$API_URL}/api/rents/${this.$route.params.id}?PageNumber=${this.page}&PageSize=10`
-            const response2 = await fetch(url2, {
+            const url = `${this.$API_URL}/api/rents/${this.$route.params.id}?PageNumber=${this.page}&PageSize=10`
+            const response2 = await fetch(url, {
                 credentials: 'include',
                 headers: {
                     'Authorization': `Bearer ${this.$cookies.get('auth')}`
@@ -125,7 +130,7 @@ export default {
                 }
             })
             this.roles = await response3.json()
-            this.selectedRoleId = this.roles.find(r => r.name == this.data.role).Id
+            this.selectedRoleId = this.roles.find(r => r.name == this.data.role).id
         },
         ConvertDateTime(datetime) {
             if(datetime == null) return ''
@@ -144,6 +149,28 @@ export default {
             .then(response => {
                 this.fetchRoles()
             })
+        },
+        async ReturnBook(id) {
+            var now = Date.now()
+            var newDate = new Date(now + 2 * 60 * 60 * 1000);
+            var date = new Date(newDate).toJSON()
+            const url = `${this.$API_URL}/api/rents/${id}`
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.$cookies.get('auth')}`
+                 },
+                body: JSON.stringify({"returnDate": date})
+            })
+            this.fetchRents()
+        },
+        SetSelectedIfRole(roleName) {
+            if(roleName == this.data.role) {
+                console.log(roleName);
+                return true;
+            }
+            return false;
         }
 
     },
