@@ -39,6 +39,8 @@ namespace LibraryAPI
                 eb.HasOne(b => b.Category)
                     .WithMany(c => c.Books)
                     .HasForeignKey(b => b.CategoryId);
+
+                eb.HasIndex(b => new { b.Title, b.Author});
             });
 
             modelBuilder.Entity<Category>(eb =>
@@ -75,6 +77,8 @@ namespace LibraryAPI
                 eb.HasMany(u => u.Rents)
                     .WithOne(re => re.User)
                     .HasForeignKey(re => re.UserId);
+
+                eb.HasIndex(u => new { u.Firstname, u.Lastname, u.Email });
             });
 
             //Seeding data
