@@ -1,47 +1,29 @@
-﻿using LibraryAPI.Entities;
-using System.Reflection.Metadata.Ecma335;
-using static System.Reflection.Metadata.BlobBuilder;
+﻿using LibraryAPI.Data.Context;
+using LibraryAPI.Entities;
 
-namespace LibraryAPI
+namespace LibraryAPI.Data.Seeds
 {
-    public class LibrarySeeder
+    public class UserSeeder : ISeed
     {
         private readonly LibraryContext _dbContext;
-        private bool _hasUpdated = false;
-
-        public LibrarySeeder(LibraryContext dbContext)
+        public UserSeeder(LibraryContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public void Seed()
+        public async Task<bool> SeedData()
         {
-            if(_dbContext.Database.CanConnect())
-            {
-                if(!_dbContext.Users.Any())
-                {
-                    var users = GetUsers();
-                    _dbContext.Users.AddRange(users);
-                    _hasUpdated = true;
-                }
-                if(!_dbContext.Categories.Any())
-                {
-                    var categories = GetCategories();
-                    _dbContext.Categories.AddRange(categories);
-                    _hasUpdated = true;
-                }
-                if(!_dbContext.Books.Any())
-                {
-                    var books = GetBooks();
-                    _dbContext.Books.AddRange(books);
-                    _hasUpdated = true;
-                }
+            if (_dbContext.Users.Any()) 
+                return true;
 
-                if( _hasUpdated) _dbContext.SaveChanges();
-            }
+            var users = GetData();
+            _dbContext.Users.AddRange(users);
+            await _dbContext.SaveChangesAsync();
+
+            return false;
         }
 
-        private IEnumerable<User> GetUsers()
+        private IEnumerable<User> GetData()
         {
             var users = new List<User>()
             {
@@ -96,34 +78,5 @@ namespace LibraryAPI
             };
             return users;
         }
-
-        private IEnumerable<Category> GetCategories()
-        {
-            var categories = new List<Category>()
-            {
-                new Category()
-                {
-                    Name = "Test"
-                }
-            };
-            return categories;
-        }
-
-        private IEnumerable<Book> GetBooks()
-        {
-            var books = new List<Book>()
-            {
-                new Book()
-                {
-                    Title = "Testowy tytuł",
-                    Author = "Adam Tester",
-                    IsAvailable = true,
-                    PublicationYear = 2023,
-                    CategoryId = 1
-                }
-            };
-            return books;
-        }
-        
     }
 }

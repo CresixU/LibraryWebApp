@@ -12,6 +12,10 @@ using NLog.Web;
 using System.Text.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LibraryAPI.Data.Context;
+using LibraryAPI.Data.Seeds;
+using LibraryAPI.Data;
+using LibraryAPI.Data.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +50,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<LibrarySeeder>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -77,12 +80,12 @@ builder.Services.AddDbContext<LibraryContext>(
     option => option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
     );*/
 
+builder.Services.RegisterSeeds();
+await builder.Services.ExecuteSeed();
+
 var app = builder.Build();
 
 app.UseCors("FrontEndClient");
-var scope = app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetRequiredService<LibrarySeeder>();
-seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -99,5 +102,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await builder.Services.MigrateDatabase();
 
 app.Run();
