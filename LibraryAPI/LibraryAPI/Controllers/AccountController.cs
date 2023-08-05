@@ -18,26 +18,30 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult RegisterUser([FromBody] RegisterUserDTO dto)
+        public async Task<ActionResult> RegisterUser([FromBody] RegisterUserDTO dto)
         {
-            var id = _service.RegisterUser(dto).Result;
-            if (id == -1) return Conflict("Email taken"); 
+            var id = await _service.RegisterUser(dto);
+            if (id == -1)
+                return Conflict("Email taken"); 
+
             return Created($"api/account/{id}",null);
         }
 
         [HttpPost("login")]
-        public ActionResult Login([FromBody] LoginUserDTO dto)
+        public async Task<ActionResult> Login([FromBody] LoginUserDTO dto)
         {
-            string token = _service.GenerateJwt(dto).Result;
+            string token = await _service.GenerateJwt(dto);
             return Ok(token);
         }
 
         [HttpGet("checkmail")]
-        public ActionResult IsEmailAvailable([FromQuery] string email)
+        public async Task<ActionResult> IsEmailAvailable([FromQuery] string email)
         {
 
-            if(_service.IsEmailAvailable(email).Result) return Ok(true);
-            else return Conflict("Email taken");
+            if(await _service.IsEmailAvailable(email))
+                return Ok(true);
+
+            return Conflict("Email taken");
         }
 
 

@@ -21,46 +21,49 @@ namespace LibraryAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult<IEnumerable<BookDTO>> GetAll([FromQuery]LibraryQuery query)
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetAll([FromQuery] LibraryQuery query)
         {
-            var books = _service.GetAll(query).Result;
+            var books = await _service.GetAll(query);
             return Ok(books);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<BookDTO>> Get([FromRoute] int id)
+        public async Task<ActionResult<IEnumerable<BookDTO>>> Get([FromRoute] int id)
         {
-            var book = _service.Get(id).Result;
+            var book = await _service.Get(id);
 
-            if(book is null) return NotFound();
+            if(book is null)
+                return NotFound();
 
             return Ok(book);
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody] BookCreateDTO dto)
+        public async Task<ActionResult> Create([FromBody] BookCreateDTO dto)
         {
-            var bookId = _service.Create(dto).Result;
+            var bookId = await _service.Create(dto);
 
             return Created($"api/books/{bookId}", null);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromRoute] int id, [FromBody] BookUpdateDTO dto)
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] BookUpdateDTO dto)
         {
-            var isUpdated = _service.Update(id, dto).Result;
+            var isUpdated = await _service.Update(id, dto);
             
-            if(!isUpdated) return NotFound();
+            if(!isUpdated)
+                return NotFound();
 
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            var isDeleted = _service.Delete(id).Result;
+            var isDeleted = await _service.Delete(id);
 
-            if(!isDeleted) return NotFound();
+            if(!isDeleted)
+                return NotFound();
 
             return NoContent();
         }

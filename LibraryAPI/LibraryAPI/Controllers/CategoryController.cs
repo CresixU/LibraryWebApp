@@ -19,26 +19,26 @@ namespace LibraryAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult<IEnumerable<CategoryDTO>> GetAll()
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAll()
         {
-            var categories = _service.GetAll().Result;
+            var categories = await _service.GetAll();
 
             return Ok(categories);
         }
 
 
         [HttpPost]
-        public ActionResult Create([FromBody] CategoryDTO dto)
+        public async Task<ActionResult> Create([FromBody] CategoryDTO dto)
         {
-            var id = _service.Create(dto).Result;
+            var id = await _service.Create(dto);
 
             return Created($"api/categories/{id}", null);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromRoute] int id, [FromBody] CategoryDTO dto)
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] CategoryDTO dto)
         {
-            var isUpdated = _service.Update(id, dto).Result;
+            var isUpdated = await _service.Update(id, dto);
 
             if (!isUpdated) return NotFound();
 
@@ -46,9 +46,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            var isDeleted = _service.Delete(id).Result;
+            var isDeleted = await _service.Delete(id);
 
             if(!isDeleted) return NotFound();
 

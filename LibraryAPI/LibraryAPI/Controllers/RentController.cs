@@ -20,42 +20,42 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RentDTO>> GetAll([FromQuery]LibraryQuery query)
+        public async Task<ActionResult<IEnumerable<RentDTO>>> GetAll([FromQuery]LibraryQuery query)
         {
-            var rents = _service.GetAll(query).Result;
+            var rents = await _service.GetAll(query);
 
             return Ok(rents);
         }
 
         [HttpGet("{userId}")]
-        public ActionResult<IEnumerable<RentDTO>> GetAllByUserId([FromRoute] int userId, [FromQuery]LibraryQuery query)
+        public async Task<ActionResult<IEnumerable<RentDTO>>> GetAllByUserId([FromRoute] int userId, [FromQuery]LibraryQuery query)
         {
-            var rents = _service.GetAllByUserId(userId, query).Result;
+            var rents = await _service.GetAllByUserId(userId, query);
 
             return Ok(rents);
         }
 
         [HttpPost]
-        public ActionResult RentBooks([FromBody]RentCreateDTO dto)
+        public async Task<ActionResult> RentBooks([FromBody]RentCreateDTO dto)
         {
-            var id = _service.RentBooks(dto).Result;
+            var id = await _service.RentBooks(dto);
             if (id == 0) return NoContent();
             return Created($"api/rents/{id}", null);
         }
 
         [HttpPut("{rentId}")]
-        public ActionResult ReturnBooks([FromRoute]int rentId, [FromBody]RentReturnDTO dto)
+        public async Task<ActionResult> ReturnBooks([FromRoute]int rentId, [FromBody]RentReturnDTO dto)
         {
-            var isUpdated = _service.ReturnBooks(rentId, dto).Result;
+            var isUpdated = await _service.ReturnBooks(rentId, dto);
             if(!isUpdated) return NotFound();
 
             return Ok();
         }
 
         [HttpDelete("{rentId}")]
-        public ActionResult DeleteRent([FromRoute]int rentId)
+        public async Task<ActionResult> DeleteRent([FromRoute]int rentId)
         {
-            var isDeleted = _service.DeleteRent(rentId).Result;
+            var isDeleted = await _service.DeleteRent(rentId);
             if (!isDeleted) return NotFound();
 
             return NoContent();

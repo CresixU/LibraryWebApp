@@ -19,34 +19,34 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Role>> GetAll()
+        public async Task<ActionResult<IEnumerable<Role>>> GetAll()
         {
-            var roles = _service.GetAll().Result;
+            var roles = await _service.GetAll();
 
             return Ok(roles);
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody] RoleDTO dto)
+        public async Task<ActionResult> Create([FromBody] RoleDTO dto)
         {
-            var id = _service.Create(dto).Result;
+            var id = await _service.Create(dto);
 
             return Created($"api/roles/{id}", null);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromRoute]int id, [FromBody] RoleDTO dto)
+        public async Task<ActionResult> Update([FromRoute]int id, [FromBody] RoleDTO dto)
         {
-            var isUpdated = _service.Update(id, dto).Result;
+            var isUpdated = await _service.Update(id, dto);
             if (!isUpdated) return NotFound();
 
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            var isDeleted = _service.Delete(id).Result;
+            var isDeleted = await _service.Delete(id);
             if(!isDeleted) return NotFound();
 
             return NoContent();
