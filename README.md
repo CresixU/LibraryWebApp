@@ -20,8 +20,10 @@ NLOG<br>
 FluentValidation<br>
 xUnit
 
-## Database diagram
+## Database
 ![image](https://github.com/CresixU/LibraryWebApp/assets/40704964/1bbca310-70eb-4c7f-b591-5ad451a6e7d4)
+
+**Database Optimization:** Indexes
 
 
 ## To do
