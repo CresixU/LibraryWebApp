@@ -7,6 +7,7 @@ namespace LibraryAPI
     public class LibrarySeeder
     {
         private readonly LibraryContext _dbContext;
+        private bool _hasUpdated = false;
 
         public LibrarySeeder(LibraryContext dbContext)
         {
@@ -21,20 +22,22 @@ namespace LibraryAPI
                 {
                     var users = GetUsers();
                     _dbContext.Users.AddRange(users);
-                    _dbContext.SaveChanges();
+                    _hasUpdated = true;
                 }
                 if(!_dbContext.Categories.Any())
                 {
                     var categories = GetCategories();
                     _dbContext.Categories.AddRange(categories);
-                    _dbContext.SaveChanges();
+                    _hasUpdated = true;
                 }
                 if(!_dbContext.Books.Any())
                 {
                     var books = GetBooks();
                     _dbContext.Books.AddRange(books);
-                    _dbContext.SaveChanges();
+                    _hasUpdated = true;
                 }
+
+                if( _hasUpdated) _dbContext.SaveChanges();
             }
         }
 
