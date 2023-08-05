@@ -21,17 +21,17 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UsersDTO>> GetAll([FromQuery]LibraryQuery query)
+        public async Task<ActionResult<IEnumerable<UsersDTO>>> GetAll([FromQuery]LibraryQuery query)
         {
-            var users = _userService.GetAll(query).Result;
+            var users = await _userService.GetAll(query);
 
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<UserDTO> Get([FromRoute] int id)
+        public async Task<ActionResult<UserDTO>> Get([FromRoute] int id)
         {
-            var user = _userService.GetById(id).Result;
+            var user = await _userService.GetById(id);
 
             if (user is null) return NotFound();
 
@@ -39,17 +39,17 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser([FromBody] UserCreateDTO dto)
+        public async Task<ActionResult> CreateUser([FromBody] UserCreateDTO dto)
         {
-            var id = _userService.Create(dto).Result;
+            var id = await _userService.Create(dto);
 
             return Created($"api/users/{id}", null);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateUser([FromRoute] int id, [FromBody] UserUpdateDTO dto)
+        public async Task<ActionResult> UpdateUser([FromRoute] int id, [FromBody] UserUpdateDTO dto)
         {
-            var isUpdated = _userService.Update(id, dto).Result;
+            var isUpdated = await _userService.Update(id, dto);
 
             if (isUpdated) return Ok();
 
@@ -57,9 +57,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteUser([FromRoute] int id)
+        public async Task<ActionResult> DeleteUser([FromRoute] int id)
         {
-            var isDeleted = _userService.Delete(id).Result;
+            var isDeleted = await _userService.Delete(id);
 
             if (isDeleted) return NoContent();
 
@@ -67,9 +67,9 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpPut("{id}/role/{roleId}")]
-        public ActionResult UserUpdateRole([FromRoute] int id, [FromRoute] int roleId)
+        public async Task<ActionResult> UserUpdateRole([FromRoute] int id, [FromRoute] int roleId)
         {
-            var isUpdated = _userService.RoleUpdate(id, roleId).Result;
+            var isUpdated = await _userService.RoleUpdate(id, roleId);
 
             if (isUpdated) return Ok();
 
