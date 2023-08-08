@@ -36,7 +36,7 @@ namespace LibraryAPI.Services
                         .Include(r => r.User)
                         .Include(r => r.Books)
                         .Where(r => r.isDeleted == false && 
-                                    (query.SearchPhrase == null || ((r.User.Firstname + ' ' + r.User.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
+                                    (query.SearchPhrase == null || (($"{r.User.Firstname} {r.User.Lastname}").ToLower().Contains(query.SearchPhrase.ToLower())
                                                                 || r.User.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
                         .ToListAsync();
 
