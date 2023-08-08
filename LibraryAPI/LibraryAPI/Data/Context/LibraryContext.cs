@@ -19,5 +19,10 @@ namespace LibraryAPI.Data.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(LibraryContext).Assembly);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine);
+        }
     }
 }
