@@ -85,15 +85,9 @@ namespace LibraryAPI.Services
                 .Include(u => u.Address)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user is null) return false; 
+            if (user is null) return false;
 
-            user.Firstname = dto.Firstname;
-            user.Lastname = dto.Lastname;
-            user.Email = dto.Email;
-            user.Address.PostalCode = dto.PostalCode;
-            user.Address.City = dto.City;
-            user.Address.Street = dto.Street;
-            user.Address.Number = dto.Number;
+            user = _mapper.Map<User>(dto);
 
             await _dbContext.SaveChangesAsync();
 
