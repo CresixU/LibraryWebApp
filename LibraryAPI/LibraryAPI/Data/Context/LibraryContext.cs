@@ -8,7 +8,6 @@ namespace LibraryAPI.Data.Context
         public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         { }
 
-        public DbSet<Address> Addresses { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Rent> Rents { get; set; }
