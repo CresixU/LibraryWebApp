@@ -15,9 +15,14 @@ namespace LibraryAPI.Data.EntityConfigurations
                 buider.Property(u => u.Password).IsRequired();
                 buider.Property(u => u.RoleId).HasDefaultValue(4);
 
-                buider.HasOne(u => u.Address)
-                    .WithMany(a => a.Users)
-                    .HasForeignKey(u => u.AddressId);
+                buider.OwnsOne(u => u.Address, onb =>
+                {
+                    onb.Property(a => a.City).HasMaxLength(50).IsRequired();
+                    onb.Property(a => a.Street).HasMaxLength(50).IsRequired();
+                    onb.Property(a => a.Number).HasMaxLength(10).IsRequired();
+                    onb.Property(a => a.PostalCode).HasMaxLength(10).IsRequired();
+                });
+
                 buider.HasOne(u => u.Role)
                     .WithMany(ro => ro.Users)
                     .HasForeignKey(u => u.RoleId);
