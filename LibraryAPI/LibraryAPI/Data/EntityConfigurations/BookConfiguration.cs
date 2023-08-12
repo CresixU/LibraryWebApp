@@ -14,7 +14,7 @@ namespace LibraryAPI.Data.EntityConfigurations
             builder.Property(b => b.IsAvailable).HasDefaultValue(true);
 
             builder.HasMany(b => b.Rents)
-                .WithMany(re => re.Books);
+                .WithOne(re => re.Book);
 
             builder.HasOne(b => b.Category)
                 .WithMany(c => c.Books)
