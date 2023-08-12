@@ -11,6 +11,6 @@ namespace LibraryAPI.Models.Rents
 
         public string User { get; set; }
 
-        public List<BookDTO> Books { get; set; }
+        public int BookId { get; set; }
     }
 }
