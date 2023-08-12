@@ -16,6 +16,7 @@ using LibraryAPI.Data.Context;
 using LibraryAPI.Data.Seeds;
 using LibraryAPI.Data;
 using LibraryAPI.Data.Extensions;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,7 +80,7 @@ builder.Services.AddDbContext<LibraryContext>(
 /*builder.Services.AddControllers().AddJsonOptions(
     option => option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
     );*/
-
+await builder.Services.MigrateDatabase();
 builder.Services.RegisterSeeds();
 await builder.Services.ExecuteSeed();
 
@@ -102,7 +103,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-await builder.Services.MigrateDatabase();
 
 app.Run();
