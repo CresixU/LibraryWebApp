@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Models;
@@ -31,10 +32,10 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                 .Books
-                .Include(b => b.Category)
                 .Where(b => b.isDeleted == false
                           && (query.SearchPhrase == null || (b.Title.ToLower().Contains(query.SearchPhrase.ToLower())
                                                         || b.Author.ToLower().Contains(query.SearchPhrase.ToLower()))))
+                .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             var books = baseQuery
@@ -44,9 +45,7 @@ namespace LibraryAPI.Services
 
             var totalItems = baseQuery.Count();
 
-            var booksDto = _mapper.Map<List<BookDTO>>(books);
-
-            var result = new PageResult<BookDTO>(booksDto, totalItems, query.PageSize, query.PageNumber);
+            var result = new PageResult<BookDTO>(books, totalItems, query.PageSize, query.PageNumber);
 
             return result;
         }
@@ -56,7 +55,7 @@ namespace LibraryAPI.Services
             var book = await _dbContext
                 .Books
                 .Where(b => b.isDeleted == false)
-                .Include(b => b.Category)
+                .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             var bookDto = _mapper.Map<BookDTO>(book);
@@ -99,7 +98,6 @@ namespace LibraryAPI.Services
 
             if (book is null) return false;
 
-            //_dbContext.Books.Remove(book);
             book.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;

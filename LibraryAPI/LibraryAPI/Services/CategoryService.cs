@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Models.Categories;
@@ -30,12 +31,11 @@ namespace LibraryAPI.Services
             var categories = await _dbContext
                 .Categories
                 .Where(c => c.isDeleted == false)
+                .ProjectTo<CategoryDTO>(_mapper.ConfigurationProvider)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
 
-            var dtos = _mapper.Map<List<CategoryDTO>>(categories);
-
-            return dtos;
+            return categories;
         }
 
         public async Task<int> Create(CategoryDTO dto)
@@ -70,7 +70,6 @@ namespace LibraryAPI.Services
             if(category is null) return false;
             if(category.Books.Any()) return false;
 
-            //_dbContext.Categories.Remove(category);
             category.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;

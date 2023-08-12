@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Exceptions;
@@ -13,8 +14,8 @@ namespace LibraryAPI.Services
     {
         Task<PageResult<RentDTO>> GetAll(LibraryQuery query);
         Task<PageResult<RentDTO>> GetAllByUserId(int id, LibraryQuery query);
-        Task<int> RentBooks(RentCreateDTO dto);
-        Task<bool> ReturnBooks(int rentId, RentReturnDTO dto);
+        Task<int> RentBook(RentCreateDTO dto);
+        Task<bool> ReturnBook(int rentId, RentReturnDTO dto);
         Task<bool> DeleteRent(int rentId);
     }
 
@@ -33,11 +34,10 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                         .Rents
-                        .Include(r => r.User)
-                        .Include(r => r.Books)
                         .Where(r => r.isDeleted == false && 
                                     (query.SearchPhrase == null || (($"{r.User.Firstname} {r.User.Lastname}").ToLower().Contains(query.SearchPhrase.ToLower())
                                                                 || r.User.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
+                        .ProjectTo<RentDTO>(_mapper.ConfigurationProvider)
                         .ToListAsync();
 
             var rents = baseQuery
@@ -47,9 +47,7 @@ namespace LibraryAPI.Services
 
             var totalItems = baseQuery.Count();
 
-            var dtos = _mapper.Map<List<RentDTO>>(rents);
-
-            var result = new PageResult<RentDTO>(dtos, totalItems, query.PageSize, query.PageNumber);
+            var result = new PageResult<RentDTO>(rents, totalItems, query.PageSize, query.PageNumber);
 
             return result;
         }
@@ -60,7 +58,7 @@ namespace LibraryAPI.Services
                         .Users
                         .Where(r => r.isDeleted == false)
                         .Include(u => u.Rents)
-                        .ThenInclude(r => r.Books)
+                        .ThenInclude(r => r.Book)
                         .ThenInclude(b => b.Category)
                         .FirstOrDefaultAsync(u => u.Id == id);
             if (user is null)
@@ -73,28 +71,28 @@ namespace LibraryAPI.Services
 
             var totalItems = user.Rents.Count();
 
-            var dtos = _mapper.Map<List<RentDTO>>(user.Rents);
+            var dtos = _mapper.Map<List<RentDTO>>(rents);
 
             var result = new PageResult<RentDTO>(dtos, totalItems, query.PageSize, query.PageNumber);
 
             return result;
         }
 
-        public async Task<int> RentBooks(RentCreateDTO dto)
+        public async Task<int> RentBook(RentCreateDTO dto)
         {
-            var books = await _dbContext
+            var book = await _dbContext
                         .Books
-                        .Where(b => dto.BookIds.Contains(b.Id))
-                        .ToListAsync();
+                        .FirstOrDefaultAsync(b => dto.BookId.Equals(b.Id));
 
-            if (books.Count == 0)
+            if (book is null)
                 throw new NotFoundException("Book not found");
-            books.ForEach(b => b.IsAvailable = false);
+
+            book.IsAvailable = false;
 
             if (dto.RentDate is null) dto.RentDate = DateTime.Now;
 
             var rent = _mapper.Map<Rent>(dto);
-            rent.Books = books;
+            rent.Book = book;
 
             _dbContext.Rents.Add(rent);
             await _dbContext.SaveChangesAsync();
@@ -103,17 +101,17 @@ namespace LibraryAPI.Services
 
         }
 
-        public async Task<bool> ReturnBooks(int id, RentReturnDTO dto)
+        public async Task<bool> ReturnBook(int id, RentReturnDTO dto)
         {
             var rent = await _dbContext
                 .Rents
-                .Include(r => r.Books)
+                .Include(r => r.Book)
                 .FirstOrDefaultAsync(r => r.Id == id);
 
             if(rent is null) return false;
 
             rent.ReturnDate = dto.ReturnDate;
-            rent.Books.ForEach(b => b.IsAvailable = true);
+            rent.Book.IsAvailable = true;
             await _dbContext.SaveChangesAsync();
 
             return true;
