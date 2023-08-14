@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LibraryAPI.Authentication;
 using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Exceptions;
