@@ -6,6 +6,7 @@ using LibraryAPI.Exceptions;
 using LibraryAPI.Models;
 using LibraryAPI.Models.Books;
 using LibraryAPI.Models.Rents;
+using LibraryAPI.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Services
@@ -34,9 +35,7 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                         .Rents
-                        .Where(r => r.isDeleted == false && 
-                                    (query.SearchPhrase == null || (($"{r.User.Firstname} {r.User.Lastname}").ToLower().Contains(query.SearchPhrase.ToLower())
-                                                                || r.User.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
+                        .WhereIf(string.IsNullOrEmpty(query.SearchPhrase), r => !r.isDeleted && string.Concat(r.User.Firstname, r.User.Lastname, r.User.Email).Contains(query.SearchPhrase))
                         .ProjectTo<RentDTO>(_mapper.ConfigurationProvider)
                         .ToListAsync();
 
@@ -56,7 +55,7 @@ namespace LibraryAPI.Services
         {
             var user = await _dbContext
                         .Users
-                        .Where(r => r.isDeleted == false)
+                        .Where(r => !r.isDeleted)
                         .Include(u => u.Rents)
                         .ThenInclude(r => r.Book)
                         .ThenInclude(b => b.Category)
@@ -126,7 +125,6 @@ namespace LibraryAPI.Services
             if (rent is null) return false;
             if (rent.ReturnDate is null) return false;
 
-            //_dbContext.Rents.Remove(rent);
             rent.isDeleted = true;
             await _dbContext.SaveChangesAsync();
 

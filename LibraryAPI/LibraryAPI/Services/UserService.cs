@@ -4,6 +4,7 @@ using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Models;
 using LibraryAPI.Models.Users;
+using LibraryAPI.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Services
@@ -34,9 +35,7 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                 .Users
-                .Where(u => u.isDeleted == false &&
-                                    (query.SearchPhrase == null || ((u.Firstname + ' ' + u.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
-                                                                || u.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
+                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), u => !u.isDeleted && string.Concat(u.Firstname,u.Lastname,u.Email).Contains(query.SearchPhrase))
                 .ProjectTo<UsersDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
