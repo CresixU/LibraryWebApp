@@ -35,7 +35,7 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                 .Users
-                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), u => !u.isDeleted && string.Concat(u.Firstname,u.Lastname,u.Email).Contains(query.SearchPhrase))
+                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), u => string.Concat(u.Firstname,u.Lastname,u.Email).Contains(query.SearchPhrase))
                 .ProjectTo<UsersDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 

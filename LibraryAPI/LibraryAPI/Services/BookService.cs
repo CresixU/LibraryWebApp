@@ -35,7 +35,7 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                 .Books
-                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), b => !b.isDeleted && string.Concat(b.Author, b.Title).Contains(query.SearchPhrase))
+                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), b => string.Concat(b.Author, b.Title).Contains(query.SearchPhrase))
                 .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -55,7 +55,6 @@ namespace LibraryAPI.Services
         {
             var book = await _dbContext
                 .Books
-                .Where(b => !b.isDeleted)
                 .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(b => b.Id == id);
 

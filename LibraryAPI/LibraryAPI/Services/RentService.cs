@@ -35,7 +35,7 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                         .Rents
-                        .WhereIf(string.IsNullOrEmpty(query.SearchPhrase), r => !r.isDeleted && string.Concat(r.User.Firstname, r.User.Lastname, r.User.Email).Contains(query.SearchPhrase))
+                        .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), r => string.Concat(r.User.Firstname, r.User.Lastname, r.User.Email).Contains(query.SearchPhrase))
                         .ProjectTo<RentDTO>(_mapper.ConfigurationProvider)
                         .ToListAsync();
 
@@ -55,7 +55,6 @@ namespace LibraryAPI.Services
         {
             var user = await _dbContext
                         .Users
-                        .Where(r => !r.isDeleted)
                         .Include(u => u.Rents)
                         .ThenInclude(r => r.Book)
                         .ThenInclude(b => b.Category)

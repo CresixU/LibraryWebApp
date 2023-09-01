@@ -30,7 +30,6 @@ namespace LibraryAPI.Services
         {
             var categories = await _dbContext
                 .Categories
-                .Where(c => c.isDeleted == false)
                 .ProjectTo<CategoryDTO>(_mapper.ConfigurationProvider)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
