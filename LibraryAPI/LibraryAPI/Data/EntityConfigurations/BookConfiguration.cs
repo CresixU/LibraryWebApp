@@ -8,6 +8,8 @@ namespace LibraryAPI.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
+            builder.HasQueryFilter(b => !b.isDeleted);
+
             builder.Property(b => b.Author).HasMaxLength(50).IsRequired();
             builder.Property(b => b.Title).HasMaxLength(100).IsRequired();
             builder.Property(b => b.PublicationYear).HasMaxLength(4);

@@ -8,6 +8,8 @@ namespace LibraryAPI.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Rent> builder)
         {
+            builder.HasQueryFilter(r => !r.isDeleted);
+
             builder.Property(re => re.RentDate).ValueGeneratedOnAdd();
         }
     }

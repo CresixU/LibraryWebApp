@@ -8,6 +8,8 @@ namespace LibraryAPI.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
+            builder.HasQueryFilter(c => !c.isDeleted);
+
             builder.Property(c => c.Name).HasMaxLength(50).IsRequired();
         }
     }
