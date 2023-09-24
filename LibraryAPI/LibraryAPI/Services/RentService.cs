@@ -39,10 +39,7 @@ namespace LibraryAPI.Services
                         .ProjectTo<RentDTO>(_mapper.ConfigurationProvider)
                         .ToListAsync();
 
-            var rents = baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToList();
+            var rents = baseQuery.WithPagination(query);
 
             var totalItems = baseQuery.Count();
 

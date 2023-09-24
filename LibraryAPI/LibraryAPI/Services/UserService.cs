@@ -39,10 +39,7 @@ namespace LibraryAPI.Services
                 .ProjectTo<UsersDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var users = baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToList();
+            var users = baseQuery.WithPagination(query);
 
             var totalItems = baseQuery.Count();
 
