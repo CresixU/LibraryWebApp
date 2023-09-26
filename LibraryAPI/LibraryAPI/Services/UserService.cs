@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Models;
 using LibraryAPI.Models.Users;
+using LibraryAPI.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Services
@@ -32,22 +35,15 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                 .Users
-                .Include(u => u.Address)
-                .Where(u => u.isDeleted == false &&
-                                    (query.SearchPhrase == null || ((u.Firstname + ' ' + u.Lastname).ToLower().Contains(query.SearchPhrase.ToLower())
-                                                                || u.Email.ToLower().Contains(query.SearchPhrase.ToLower()))))
+                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), u => string.Concat(u.Firstname,u.Lastname,u.Email).Contains(query.SearchPhrase))
+                .ProjectTo<UsersDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var users = baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToList();
+            var users = baseQuery.WithPagination(query);
 
             var totalItems = baseQuery.Count();
 
-            var usersDtos = _mapper.Map<List<UsersDTO>>(users);
-
-            var result = new PageResult<UsersDTO>(usersDtos, totalItems, query.PageSize, query.PageNumber);
+            var result = new PageResult<UsersDTO>(users, totalItems, query.PageSize, query.PageNumber);
 
             return result;
         }
@@ -56,14 +52,10 @@ namespace LibraryAPI.Services
         {
             var user = await _dbContext
                 .Users
-                .Include(u => u.Address)
-                .Include(u => u.Role)
-                .Include(u => u.Rents)
+                .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            var userDto = _mapper.Map<UserDTO>(user);
-
-            return userDto;
+            return user;
         }
 
         public async Task<int> Create(UserCreateDTO dto)
@@ -84,15 +76,9 @@ namespace LibraryAPI.Services
                 .Include(u => u.Address)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user is null) return false; 
+            if (user is null) return false;
 
-            user.Firstname = dto.Firstname;
-            user.Lastname = dto.Lastname;
-            user.Email = dto.Email;
-            user.Address.PostalCode = dto.PostalCode;
-            user.Address.City = dto.City;
-            user.Address.Street = dto.Street;
-            user.Address.Number = dto.Number;
+            user = _mapper.Map<User>(dto);
 
             await _dbContext.SaveChangesAsync();
 
@@ -108,7 +94,6 @@ namespace LibraryAPI.Services
 
             if (user == null) return false;
 
-            //_dbContext.Users.Remove(user);
             user.isDeleted = true;
             await _dbContext.SaveChangesAsync();
 

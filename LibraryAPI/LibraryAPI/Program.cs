@@ -12,6 +12,12 @@ using NLog.Web;
 using System.Text.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LibraryAPI.Data.Context;
+using LibraryAPI.Data.Seeds;
+using LibraryAPI.Data;
+using LibraryAPI.Data.Extensions;
+using System.Reflection;
+using LibraryAPI.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,31 +28,12 @@ builder.Host.UseNLog();
 // Add services to the container.
 
 //JWT Configuration
-var authenticationSettings = new AuthenticationSettings();
-builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
-builder.Services.AddSingleton(authenticationSettings);
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultAuthenticateScheme = "Bearer";
-    option.DefaultScheme = "Bearer";
-    option.DefaultChallengeScheme = "Bearer";
-}).AddJwtBearer(cfg =>
-{
-    cfg.RequireHttpsMetadata = false;
-    cfg.SaveToken = true;
-    cfg.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = authenticationSettings.JwtIssuer,
-        ValidAudience = authenticationSettings.JwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
-    };
-});
+builder.ConfigureAuthentication();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<LibrarySeeder>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -76,13 +63,13 @@ builder.Services.AddDbContext<LibraryContext>(
 /*builder.Services.AddControllers().AddJsonOptions(
     option => option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
     );*/
+await builder.Services.MigrateDatabase();
+builder.Services.RegisterSeeds();
+await builder.Services.ExecuteSeed();
 
 var app = builder.Build();
 
 app.UseCors("FrontEndClient");
-var scope = app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetRequiredService<LibrarySeeder>();
-seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

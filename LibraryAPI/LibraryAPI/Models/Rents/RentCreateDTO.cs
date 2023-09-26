@@ -7,6 +7,6 @@ namespace LibraryAPI.Models.Rents
     {
         public int UserId { get; set; }
         public DateTime? RentDate { get; set; }
-        public List<int> BookIds { get; set; }
+        public int BookId { get; set; }
     }
 }

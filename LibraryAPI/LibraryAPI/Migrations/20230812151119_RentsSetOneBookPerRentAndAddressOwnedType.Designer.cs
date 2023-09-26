@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryAPI.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20230606091831_isDeletedColumnAdd")]
-    partial class isDeletedColumnAdd
+    [Migration("20230812151119_RentsSetOneBookPerRentAndAddressOwnedType")]
+    partial class RentsSetOneBookPerRentAndAddressOwnedType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,54 +24,6 @@ namespace LibraryAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BookRent", b =>
-                {
-                    b.Property<int>("BooksId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RentsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BooksId", "RentsId");
-
-                    b.HasIndex("RentsId");
-
-                    b.ToTable("BookRent");
-                });
-
-            modelBuilder.Entity("LibraryAPI.Entities.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses");
-                });
 
             modelBuilder.Entity("LibraryAPI.Entities.Book", b =>
                 {
@@ -110,6 +62,8 @@ namespace LibraryAPI.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("Title", "Author");
+
                     b.ToTable("Books");
                 });
 
@@ -142,6 +96,9 @@ namespace LibraryAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("RentDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
@@ -156,6 +113,8 @@ namespace LibraryAPI.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -191,40 +150,6 @@ namespace LibraryAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsImmutable = true,
-                            Name = "Admin",
-                            Power = (byte)255,
-                            isDeleted = false
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsImmutable = true,
-                            Name = "Owner",
-                            Power = (byte)200,
-                            isDeleted = false
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsImmutable = true,
-                            Name = "Employee",
-                            Power = (byte)5,
-                            isDeleted = false
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsImmutable = true,
-                            Name = "User",
-                            Power = (byte)1,
-                            isDeleted = false
-                        });
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.User", b =>
@@ -234,9 +159,6 @@ namespace LibraryAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -267,26 +189,11 @@ namespace LibraryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("RoleId");
 
+                    b.HasIndex("Firstname", "Lastname", "Email");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BookRent", b =>
-                {
-                    b.HasOne("LibraryAPI.Entities.Book", null)
-                        .WithMany()
-                        .HasForeignKey("BooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LibraryAPI.Entities.Rent", null)
-                        .WithMany()
-                        .HasForeignKey("RentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Book", b =>
@@ -302,37 +209,72 @@ namespace LibraryAPI.Migrations
 
             modelBuilder.Entity("LibraryAPI.Entities.Rent", b =>
                 {
+                    b.HasOne("LibraryAPI.Entities.Book", "Book")
+                        .WithMany("Rents")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LibraryAPI.Entities.User", "User")
                         .WithMany("Rents")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Book");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.User", b =>
                 {
-                    b.HasOne("LibraryAPI.Entities.Address", "Address")
-                        .WithMany("Users")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LibraryAPI.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("LibraryAPI.Entities.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.Navigation("Address");
 
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("LibraryAPI.Entities.Address", b =>
+            modelBuilder.Entity("LibraryAPI.Entities.Book", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("Rents");
                 });
 
             modelBuilder.Entity("LibraryAPI.Entities.Category", b =>

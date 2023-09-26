@@ -10,9 +10,7 @@ namespace LibraryAPI.Entities
         public string Email { get; set; }
         public string Password { get; set; }
         public bool isDeleted { get; set; } = false;
-
-        public int AddressId { get; set; }
-        public virtual Address Address { get; set; }
+        public Address Address { get; set; }
         public int RoleId { get; set; }
         public virtual Role Role { get; set; }
         public List<Rent> Rents { get; set; } = new List<Rent>();

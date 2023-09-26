@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Models.Roles;
 using Microsoft.EntityFrameworkCore;
@@ -28,14 +30,12 @@ namespace LibraryAPI.Services
         {
             var roles = await _dbContext
                 .Roles
-                .Where(r => r.isDeleted == false)
+                .ProjectTo<RoleDTO>(_mapper.ConfigurationProvider)
                 .OrderByDescending(r => r.IsImmutable)
                 .ThenByDescending(r => r.Power)
                 .ToListAsync();
 
-            var dtos = _mapper.Map<List<RoleDTO>>(roles);
-
-            return dtos;
+            return roles;
         }
 
         public async Task<int> Create(RoleDTO dto)
@@ -73,7 +73,6 @@ namespace LibraryAPI.Services
             if (role is null) return false;
             if (role.IsImmutable) return false;
 
-            // _dbContext.Roles.Remove(role);
             role.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;

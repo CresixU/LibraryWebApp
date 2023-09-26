@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using LibraryAPI.Data.Context;
 using LibraryAPI.Entities;
 using LibraryAPI.Models;
 using LibraryAPI.Models.Books;
+using LibraryAPI.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LibraryAPI.Services
 {
@@ -30,22 +35,15 @@ namespace LibraryAPI.Services
         {
             var baseQuery = await _dbContext
                 .Books
-                .Include(b => b.Category)
-                .Where(b => b.isDeleted == false
-                          && (query.SearchPhrase == null || (b.Title.ToLower().Contains(query.SearchPhrase.ToLower())
-                                                        || b.Author.ToLower().Contains(query.SearchPhrase.ToLower()))))
+                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), b => string.Concat(b.Author, b.Title).Contains(query.SearchPhrase))
+                .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var books = baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToList();
+            var books = baseQuery.WithPagination(query);
 
             var totalItems = baseQuery.Count();
 
-            var booksDto = _mapper.Map<List<BookDTO>>(books);
-
-            var result = new PageResult<BookDTO>(booksDto, totalItems, query.PageSize, query.PageNumber);
+            var result = new PageResult<BookDTO>(books, totalItems, query.PageSize, query.PageNumber);
 
             return result;
         }
@@ -54,8 +52,7 @@ namespace LibraryAPI.Services
         {
             var book = await _dbContext
                 .Books
-                .Where(b => b.isDeleted == false)
-                .Include(b => b.Category)
+                .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             var bookDto = _mapper.Map<BookDTO>(book);
@@ -98,7 +95,6 @@ namespace LibraryAPI.Services
 
             if (book is null) return false;
 
-            //_dbContext.Books.Remove(book);
             book.isDeleted = true;
             await _dbContext.SaveChangesAsync();
             return true;

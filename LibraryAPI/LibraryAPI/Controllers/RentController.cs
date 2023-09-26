@@ -38,7 +38,7 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> RentBooks([FromBody]RentCreateDTO dto)
         {
-            var id = await _service.RentBooks(dto);
+            var id = await _service.RentBook(dto);
             if (id == 0) return NoContent();
             return Created($"api/rents/{id}", null);
         }
@@ -46,7 +46,7 @@ namespace LibraryAPI.Controllers
         [HttpPut("{rentId}")]
         public async Task<ActionResult> ReturnBooks([FromRoute]int rentId, [FromBody]RentReturnDTO dto)
         {
-            var isUpdated = await _service.ReturnBooks(rentId, dto);
+            var isUpdated = await _service.ReturnBook(rentId, dto);
             if(!isUpdated) return NotFound();
 
             return Ok();

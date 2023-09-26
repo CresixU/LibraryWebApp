@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryAPI.Data.Context;
 using LibraryAPI.Models.Account;
 
 namespace LibraryAPI.Validators
