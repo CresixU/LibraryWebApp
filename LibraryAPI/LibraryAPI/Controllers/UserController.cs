@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using LibraryAPI.Entities;
-using LibraryAPI.Models;
-using LibraryAPI.Models.Users;
-using LibraryAPI.Services;
+﻿using LibraryAPI.Application.Models.Users;
+using LibraryAPI.Application.Services;
+using LibraryAPI.Domain.Services.Page;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

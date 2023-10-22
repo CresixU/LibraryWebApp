@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Application.Models.Books;
-using LibraryAPI.Infrastructure.Entities;
+using LibraryAPI.Domain.Entities;
 
 namespace LibraryAPI.Infrastructure.MappingProfiles
 {

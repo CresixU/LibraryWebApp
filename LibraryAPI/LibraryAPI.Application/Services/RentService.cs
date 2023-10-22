@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using LibraryAPI.Application.Models;
 using LibraryAPI.Application.Models.Rents;
 using LibraryAPI.Domain.Exceptions;
+using LibraryAPI.Domain.Services.Page;
 
 namespace LibraryAPI.Application.Services
 {

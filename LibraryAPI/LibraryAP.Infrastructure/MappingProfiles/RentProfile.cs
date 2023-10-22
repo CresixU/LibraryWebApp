@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryAPI.Application.Models.Rents;
-using LibraryAPI.Infrastructure.Entities;
+using LibraryAPI.Domain.Entities;
 
 namespace LibraryAPI.Infrastructure.MappingProfiles
 {

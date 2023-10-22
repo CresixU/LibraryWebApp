@@ -1,5 +1,7 @@
-﻿using LibraryAPI.Infrastructure.Context;
+﻿using LibraryAPI.Domain.Repositories;
+using LibraryAPI.Infrastructure.Context;
 using LibraryAPI.Infrastructure.Extensions;
+using LibraryAPI.Infrastructure.Persistance.Repositories;
 using LibraryAPI.Infrastructure.Seeds;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace LibraryAPI.Infrastructure
             //await builder.Services.MigrateDatabase();
             builder.Services.RegisterSeeds();
             //await builder.Services.ExecuteSeed();
+            builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+
             return builder.Services;
         }
     }

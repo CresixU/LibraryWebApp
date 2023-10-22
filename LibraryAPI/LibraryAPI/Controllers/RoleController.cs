@@ -1,5 +1,5 @@
-﻿using LibraryAPI.Entities;
-using LibraryAPI.Models.Roles;
+﻿using LibraryAPI.Application.Models.Roles;
+using LibraryAPI.Entities;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

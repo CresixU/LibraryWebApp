@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using LibraryAPI.Application.Models;
 using LibraryAPI.Application.Models.Users;
+using LibraryAPI.Domain.Services.Page;
 
 namespace LibraryAPI.Application.Services
 {

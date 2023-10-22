@@ -1,7 +1,5 @@
-﻿using LibraryAPI.Models.Account;
-using LibraryAPI.Models.Users;
-using LibraryAPI.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using LibraryAPI.Application.Application.Services;
+using LibraryAPI.Application.Models.Account;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers

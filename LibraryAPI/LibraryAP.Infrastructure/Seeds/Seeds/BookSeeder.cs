@@ -1,5 +1,5 @@
-﻿using LibraryAPI.Infrastructure.Context;
-using LibraryAPI.Infrastructure.Entities;
+﻿using LibraryAPI.Domain.Entities;
+using LibraryAPI.Infrastructure.Context;
 
 namespace LibraryAPI.Infrastructure.Seeds.Seeds
 {

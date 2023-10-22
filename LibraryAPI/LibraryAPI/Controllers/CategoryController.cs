@@ -1,5 +1,5 @@
-﻿using LibraryAPI.Models.Categories;
-using LibraryAPI.Services;
+﻿using LibraryAPI.Application.Models.Categories;
+using LibraryAPI.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

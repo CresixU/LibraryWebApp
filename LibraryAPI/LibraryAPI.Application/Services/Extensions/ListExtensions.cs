@@ -1,4 +1,4 @@
-﻿using LibraryAPI.Application.Models;
+﻿using LibraryAPI.Domain.Services.Page;
 
 namespace LibraryAPI.Application.Services.Extensions
 {

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using LibraryAPI.Application.Models;
 using LibraryAPI.Application.Models.Books;
+using LibraryAPI.Application.Services.Extensions;
+using LibraryAPI.Domain.Repositories;
+using LibraryAPI.Domain.Services.Page;
 
 namespace LibraryAPI.Application.Services
 {
@@ -16,22 +18,23 @@ namespace LibraryAPI.Application.Services
 
     public class BookService : IBookService
     {
-        private readonly LibraryContext _dbContext;
         private readonly IMapper _mapper;
+        private IBooksRepository _booksRepository;
 
-        public BookService(LibraryContext dbContext, IMapper mapper)
+        public BookService(IMapper mapper, IBooksRepository bookRepository)
         {
-            _dbContext = dbContext;
             _mapper = mapper;
+            _booksRepository = bookRepository;
         }
 
         public async Task<PageResult<BookDTO>> GetAll(LibraryQuery query)
         {
-            var baseQuery = await _dbContext
-                .Books
-                .WhereIf(!string.IsNullOrEmpty(query.SearchPhrase), b => string.Concat(b.Author, b.Title).Contains(query.SearchPhrase))
+            var baseQuery = await _booksRepository
+                .GetAll(query)
                 .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+
+
 
             var books = baseQuery.WithPagination(query);
 
