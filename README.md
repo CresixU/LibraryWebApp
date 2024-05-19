@@ -1,3 +1,5 @@
+# This project is no longer being developed due to an engineering project for college
+<br><br><br>
 # Library Web Application
 
 A simple CRUD application that allow to manage a library only as a employee. <br>
